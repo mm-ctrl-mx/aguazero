@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 900">
+  <defs>
+    <linearGradient id="fondo" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F4F7F8"/><stop offset="1" stop-color="#E2EAEC"/>
+    </linearGradient>
+    <linearGradient id="lente" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#A9CBE6"/><stop offset=".55" stop-color="#1F78AE"/><stop offset="1" stop-color="#0B5E62"/>
+    </linearGradient>
+    <linearGradient id="tela" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0E6C70"/><stop offset="1" stop-color="#073F42"/>
+    </linearGradient>
+    <pattern id="puntos" width="46" height="46" patternUnits="userSpaceOnUse">
+      <circle cx="12" cy="12" r="5" fill="#fff" opacity=".22"/>
+      <path d="M33 26c4 6 4 10 0 13-4-3-4-7 0-13z" fill="#A9CBE6" opacity=".35"/>
+    </pattern>
+  </defs>
+  <rect width="900" height="900" fill="url(#fondo)"/>
+  <ellipse cx="450" cy="790" rx="330" ry="34" fill="#0B5E62" opacity=".12"/>
+
+  <!-- pañuelo -->
+  <path d="M150 470 L750 470 Q720 520 450 760 Q180 520 150 470 Z" fill="url(#tela)"/>
+  <path d="M150 470 L750 470 Q720 520 450 760 Q180 520 150 470 Z" fill="url(#puntos)"/>
+  <path d="M150 470 L750 470" stroke="#073F42" stroke-width="10" stroke-linecap="round"/>
+  <path d="M150 470 q-50 20 -70 70 M150 470 q-30 40 -26 100" stroke="#0B5E62" stroke-width="16" fill="none" stroke-linecap="round"/>
+  <path d="M750 470 q50 20 70 70 M750 470 q30 40 26 100" stroke="#0B5E62" stroke-width="16" fill="none" stroke-linecap="round"/>
+  <!-- sello del pañuelo -->
+  <circle cx="450" cy="580" r="70" fill="#fff"/>
+  <path d="M398 612 a62 62 0 0 0 110 -10" stroke="#1DAA3C" stroke-width="9" fill="none" stroke-linecap="round"/>
+  <text x="450" y="574" text-anchor="middle" font-family="Impact,'Arial Narrow',sans-serif" font-size="40" fill="#6487B6">AGUA</text>
+  <text x="440" y="612" text-anchor="middle" font-family="Impact,'Arial Narrow',sans-serif" font-size="38" fill="#0B5E62">ZERO</text>
+  <path d="M492 584 c10 14 14 22 6 30 -9 6 -18 -2 -14 -12z" fill="#1F78AE"/>
+
+  <!-- goggles -->
+  <path d="M120 300 Q450 230 780 300" stroke="#10292A" stroke-width="30" fill="none" stroke-linecap="round"/>
+  <rect x="210" y="225" width="480" height="190" rx="95" fill="#10292A"/>
+  <rect x="232" y="246" width="200" height="148" rx="74" fill="url(#lente)"/>
+  <rect x="468" y="246" width="200" height="148" rx="74" fill="url(#lente)"/>
+  <path d="M432 300 q18 -16 36 0 v40 q-18 -14 -36 0z" fill="#10292A"/>
+  <path d="M262 290 q30 -30 80 -26" stroke="#fff" stroke-width="12" fill="none" stroke-linecap="round" opacity=".7"/>
+  <path d="M498 290 q30 -30 80 -26" stroke="#fff" stroke-width="12" fill="none" stroke-linecap="round" opacity=".7"/>
+
+  <!-- gotas a presión -->
+  <g fill="#1F78AE" opacity=".85">
+    <path d="M120 150 c14 20 18 30 8 40 -12 8 -24 -2 -18 -16z"/>
+    <path d="M770 140 c12 18 16 27 7 36 -11 7 -22 -2 -16 -14z"/>
+    <path d="M820 380 c10 15 13 22 6 29 -9 6 -18 -2 -13 -12z"/>
+    <path d="M70 380 c10 15 13 22 6 29 -9 6 -18 -2 -13 -12z"/>
+  </g>
+  <g stroke="#A9CBE6" stroke-width="8" stroke-linecap="round" opacity=".9">
+    <path d="M40 90 l90 40"/><path d="M60 60 l110 36"/><path d="M30 130 l70 34"/>
+  </g>
+
+  <!-- etiqueta -->
+  <rect x="300" y="88" width="300" height="56" rx="28" fill="#1DAA3C"/>
+  <text x="450" y="127" text-anchor="middle" font-family="Impact,'Arial Narrow',sans-serif" font-size="32" fill="#fff" letter-spacing="2">KIT MANIFESTANTE</text>
+</svg>

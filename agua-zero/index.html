@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AGUA ZERO — Soluciones para el agua que te tocó</title>
+<link rel="icon" href="img/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700;6..12,800;6..12,900&display=swap" rel="stylesheet">
+<!--
+  ============================================================
+  AGUA ZERO — tienda ficticia (sitio estático)
+  ============================================================
+  PARA EDITAR, solo cuatro lugares (en el <script> de abajo):
+
+  1. const MARCA      → nombre, bajada, razón social.
+  2. const REVELAR    → true / false. Controla si el checkout
+                        descubre la sátira. Es "la grieta".
+  3. const PRODUCTOS  → productos. `img` es la lista de fotos
+                        (la primera es la portada). `dato` es la
+                        cifra real que el producto está tapando.
+  4. const COLONIAS   → ranking "más pedidos en tu colonia"
+                        (en realidad: reportes ciudadanos IMDEC).
+
+  Paleta tomada del logotipo AGUA ZERO:
+    azul "AGUA"   #6487B6   ·  petróleo "ZERO"  #0B5E62
+    verde arco    #1DAA3C   ·  gota             #1F78AE → #A9CBE6
+  ============================================================
+-->
+<style>
+:root{
+  --agua:#6487B6; --agua-claro:#E7EEF7;
+  --zero:#0B5E62; --zero-osc:#073F42;
+  --verde:#1DAA3C; --verde-osc:#158A2F; --verde-claro:#E6F6EA;
+  --gota:#1F78AE; --gota-claro:#A9CBE6;
+  --tinta:#10292A; --gris:#6B7778; --linea:#E3E9EA; --fondo:#F2F5F6; --blanco:#fff;
+  --display:"Bebas Neue",Impact,"Arial Narrow",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Nunito Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  background:var(--fondo);color:var(--tinta);font-size:14px;line-height:1.4;
+}
+img{display:block;max-width:100%}
+button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+a{color:inherit}
+[hidden]{display:none!important}
+
+/* ---------- barra de urgencia ---------- */
+#urgencia{
+  background:linear-gradient(90deg,var(--zero-osc),var(--zero) 45%,var(--gota));color:#fff;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  padding:7px 14px;font-size:13px;font-weight:800;flex-wrap:wrap;text-align:center;
+}
+.reloj{display:flex;gap:3px;align-items:center}
+.reloj span{
+  background:#fff;color:var(--zero);border-radius:4px;padding:1px 5px;
+  font-variant-numeric:tabular-nums;min-width:26px;text-align:center;font-weight:900;
+}
+
+/* ---------- header (blanco, como Temu) ---------- */
+header.top{background:#fff;padding:10px 14px;position:sticky;top:0;z-index:50;border-bottom:1px solid var(--linea)}
+.hwrap{max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:14px}
+.logo{display:flex;align-items:center;gap:8px;flex:none}
+.logo img.circ{width:44px;height:44px}
+.logo img.wm{height:26px;width:auto}
+.buscar{
+  flex:1;display:flex;background:#fff;border-radius:999px;overflow:hidden;
+  border:2px solid var(--zero);min-width:120px;
+}
+.buscar input{flex:1;border:0;padding:9px 16px;font:inherit;outline:none;min-width:0;background:transparent}
+.buscar button{background:var(--zero);color:#fff;padding:0 20px;font-weight:800;border-radius:999px;margin:3px}
+.hlinks{display:flex;gap:14px;font-size:12.5px;font-weight:700;color:var(--tinta);white-space:nowrap}
+.hlinks a{text-decoration:none}
+.carrito{
+  background:var(--verde);color:#fff;border-radius:999px;padding:8px 14px;
+  font-weight:800;white-space:nowrap;display:flex;align-items:center;gap:6px;
+}
+.carrito b{background:#fff;color:var(--verde-osc);border-radius:999px;padding:0 7px;font-size:12px}
+.carrito.pop{animation:pop .4s}
+@keyframes pop{50%{transform:scale(1.15)}}
+
+/* ---------- garantías ---------- */
+#garantias{
+  background:var(--verde-claro);
+  display:flex;gap:22px;justify-content:center;padding:8px 14px;
+  font-size:12px;color:var(--verde-osc);font-weight:800;flex-wrap:wrap;
+}
+#garantias span::before{content:"✓ ";}
+
+main{max-width:1200px;margin:0 auto;padding:14px}
+
+/* ---------- banner ---------- */
+#banner{
+  background:radial-gradient(circle at 85% 30%,var(--gota-claro) 0,transparent 45%),
+             linear-gradient(120deg,var(--zero) 0%,var(--gota) 70%,var(--agua) 100%);
+  border-radius:14px;padding:26px 28px;color:#fff;margin-bottom:14px;
+  display:grid;grid-template-columns:1fr auto;align-items:center;gap:18px;overflow:hidden;position:relative;
+}
+#banner .eyebrow{display:inline-block;background:var(--verde);font-weight:900;font-size:11.5px;
+  letter-spacing:1px;padding:3px 9px;border-radius:4px;margin-bottom:10px}
+#banner h1{font-family:var(--display);font-weight:400;font-size:clamp(34px,6vw,62px);line-height:.95;letter-spacing:.5px}
+#banner p{margin-top:10px;font-size:15px;opacity:.95;max-width:48ch}
+#banner .ctas{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+.btn{background:var(--verde);color:#fff;font-weight:900;border-radius:999px;padding:11px 22px;font-size:14px}
+.btn:hover{background:var(--verde-osc)}
+.btn.blanco{background:#fff;color:var(--zero)}
+.btn.blanco:hover{background:var(--agua-claro)}
+#banner .heroimg{width:min(300px,34vw);position:relative}
+#banner .heroimg img{border-radius:12px;box-shadow:0 14px 40px rgba(0,0,0,.3);transform:rotate(3deg)}
+#banner .sello{
+  position:absolute;top:-10px;left:-18px;background:var(--verde);color:#fff;font-weight:900;
+  padding:10px 12px;border-radius:50%;text-align:center;transform:rotate(-12deg);
+  width:86px;height:86px;display:grid;place-content:center;font-size:11px;line-height:1.05;
+  border:3px solid #fff;box-shadow:0 6px 18px rgba(0,0,0,.25)
+}
+#banner .sello b{display:block;font-family:var(--display);font-weight:400;font-size:32px;line-height:.9}
+
+/* ---------- envío gratis ---------- */
+#envio{
+  background:#fff;border-radius:12px;padding:12px 16px;margin-bottom:14px;
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+}
+#envio p{font-size:13px;font-weight:800;color:var(--verde-osc);flex:1 1 220px}
+.barra{height:8px;background:var(--linea);border-radius:999px;overflow:hidden;flex:2 1 240px}
+.barra i{display:block;height:100%;background:linear-gradient(90deg,var(--verde),var(--gota));width:0;transition:width .4s}
+
+/* ---------- títulos de sección ---------- */
+.sec-t{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:22px 0 10px}
+.sec-t h2{font-family:var(--display);font-weight:400;font-size:30px;letter-spacing:.5px;line-height:1;color:var(--zero)}
+.sec-t span{font-size:12.5px;color:var(--gris);font-weight:700}
+
+/* ---------- ofertas relámpago ---------- */
+#relampago{
+  background:#fff;border-radius:14px;padding:14px;
+  border-top:4px solid var(--verde);
+}
+#relampago .cab{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+#relampago h2{font-family:var(--display);font-weight:400;font-size:30px;line-height:1;color:var(--zero)}
+#relampago h2 em{font-style:normal;color:var(--verde)}
+#fila{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:6px}
+.mini-card{flex:0 0 150px;scroll-snap-align:start;cursor:pointer}
+.mini-card .ph{aspect-ratio:1;border-radius:10px;overflow:hidden;background:var(--fondo);position:relative}
+.mini-card .ph img{width:100%;height:100%;object-fit:cover}
+.mini-card .pr{font-family:var(--display);font-size:24px;color:var(--zero);margin-top:5px;line-height:1}
+.mini-card .pr s{font-family:"Nunito Sans",sans-serif;font-size:11px;color:var(--gris);margin-left:4px}
+.vendido{height:14px;background:var(--verde-claro);border-radius:999px;overflow:hidden;position:relative;margin-top:5px}
+.vendido i{display:block;height:100%;background:var(--verde)}
+.vendido span{position:absolute;inset:0;font-size:9.5px;font-weight:900;color:#fff;display:flex;align-items:center;padding-left:7px;text-shadow:0 0 3px rgba(0,0,0,.35)}
+
+/* ---------- categorías ---------- */
+#cats{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
+#cats button{
+  background:#fff;border:1.5px solid var(--linea);border-radius:999px;
+  padding:7px 16px;white-space:nowrap;font-weight:800;color:var(--gris);
+}
+#cats button[aria-pressed="true"]{background:var(--zero);color:#fff;border-color:var(--zero)}
+
+/* ---------- rejilla ---------- */
+#rejilla{
+  display:grid;gap:12px;margin-top:12px;
+  grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+}
+.card{
+  background:#fff;border-radius:12px;overflow:hidden;position:relative;
+  display:flex;flex-direction:column;transition:box-shadow .2s,transform .2s;
+}
+.card:hover{box-shadow:0 8px 24px rgba(11,94,98,.14);transform:translateY(-2px)}
+.card .foto{aspect-ratio:1;background:var(--fondo);position:relative;cursor:pointer;overflow:hidden}
+.card .foto img{width:100%;height:100%;object-fit:cover;transition:opacity .3s}
+.card .foto img.alt{position:absolute;inset:0;opacity:0}
+.card:hover .foto img.alt{opacity:1}
+.desc{
+  position:absolute;top:8px;left:8px;background:var(--verde);color:#fff;
+  font-size:11.5px;font-weight:900;padding:2px 7px;border-radius:4px;z-index:2;
+}
+.tag-kit{position:absolute;top:8px;right:8px;background:var(--zero);color:#fff;font-size:11px;font-weight:900;padding:2px 7px;border-radius:4px;z-index:2}
+.viendo{
+  position:absolute;bottom:8px;left:8px;right:8px;background:rgba(7,63,66,.82);
+  color:#fff;font-size:10.5px;padding:3px 8px;border-radius:5px;font-weight:700;z-index:2;
+}
+.info{padding:10px 11px 12px;display:flex;flex-direction:column;gap:5px;flex:1}
+.nom{font-size:13.5px;line-height:1.3;font-weight:700;cursor:pointer;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.claim{font-size:11.5px;color:var(--gris);line-height:1.3;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.estrellas{font-size:11px;color:var(--gris);display:flex;align-items:center;gap:4px}
+.estrellas b{color:var(--verde);letter-spacing:-1px}
+.precios{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;margin-top:auto}
+.precio{color:var(--zero);font-family:var(--display);font-size:28px;line-height:1}
+.antes{color:var(--gris);text-decoration:line-through;font-size:12px}
+.quedan{
+  font-size:10.5px;color:var(--zero);font-weight:800;
+  background:var(--agua-claro);border-radius:4px;padding:2px 6px;align-self:flex-start;
+}
+.add{
+  background:var(--verde);color:#fff;font-weight:900;
+  border-radius:999px;padding:9px;width:100%;font-size:13px;margin-top:3px;
+}
+.add:hover{background:var(--verde-osc)}
+
+/* ---------- ahora sí con presión ---------- */
+#presion{
+  margin-top:14px;border-radius:14px;overflow:hidden;position:relative;color:#fff;
+  background:linear-gradient(100deg,#10292A 0%,var(--zero-osc) 55%,var(--gota) 100%);
+  display:grid;grid-template-columns:1.3fr 1fr;align-items:center;
+}
+#presion .txt{padding:24px 26px;position:relative;z-index:1}
+#presion .eyebrow{display:inline-block;background:#fff;color:var(--zero);font-weight:900;font-size:11px;letter-spacing:1px;padding:3px 9px;border-radius:4px;margin-bottom:10px}
+#presion h2{font-family:var(--display);font-weight:400;font-size:clamp(34px,5vw,54px);line-height:.92}
+#presion h2 em{font-style:normal;color:var(--gota-claro)}
+#presion p{margin-top:10px;font-size:14px;max-width:50ch;color:#D7E7E8}
+#presion .ast{font-size:11px;color:#9FC0C1;margin-top:10px}
+#presion .ctas{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;align-items:center}
+#presion .chip{background:rgba(255,255,255,.12);border-radius:999px;padding:6px 12px;font-size:12px;font-weight:800}
+#presion svg{width:100%;height:100%;min-height:220px;display:block}
+
+/* ---------- etiqueta nutrimental ---------- */
+#etiqueta-wrap{display:grid;grid-template-columns:minmax(260px,380px) 1fr;gap:14px;align-items:start}
+.nutri{background:#fff;border:3px solid var(--tinta);padding:10px 12px;font-size:12.5px;color:var(--tinta)}
+.nutri h3{font-family:var(--display);font-weight:400;font-size:40px;line-height:.9;border-bottom:1px solid var(--tinta);padding-bottom:4px}
+.nutri .porcion{font-size:12px;border-bottom:10px solid var(--tinta);padding:4px 0 6px}
+.nutri .porcion b{font-weight:900}
+.nutri .cab{display:flex;justify-content:space-between;font-weight:900;font-size:11px;border-bottom:4px solid var(--tinta);padding:4px 0}
+.nutri .r{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid #9AA6A7;padding:4px 0}
+.nutri .r b{font-weight:900}
+.nutri .r span:last-child{text-align:right;white-space:nowrap;font-weight:800}
+.nutri .r.sub{padding-left:14px}
+.nutri .r.fuerte{border-bottom:4px solid var(--tinta)}
+.nutri .pie{font-size:10.5px;line-height:1.4;padding-top:6px;color:#33494A}
+.efectos{display:grid;gap:9px;grid-template-columns:repeat(auto-fill,minmax(210px,1fr))}
+.efecto{background:#fff;border-radius:12px;padding:13px 14px;border-left:4px solid var(--agua)}
+.efecto b{display:block;font-size:13.5px;color:var(--zero)}
+.efecto span{font-size:12.5px;color:var(--gris)}
+.efecto.promo{background:var(--verde-claro);border-left-color:var(--verde)}
+.efecto.promo b{color:var(--verde-osc)}
+
+/* ---------- frases oficiales ---------- */
+#frases{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(270px,1fr))}
+.frase{background:#fff;border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
+.frase blockquote{padding:16px 16px 12px;font-size:15px;line-height:1.4;font-weight:700;color:var(--tinta);position:relative;flex:1}
+.frase blockquote::before{content:"“";font-family:var(--display);font-size:64px;line-height:.6;color:var(--agua);display:block;height:26px}
+.frase .quien{display:flex;align-items:center;gap:9px;padding:0 16px 12px;font-size:12px}
+.frase .quien .av{width:30px;height:30px;border-radius:50%;background:var(--zero);color:#fff;display:grid;place-items:center;font-weight:900;font-size:12px;flex:none}
+.frase .quien i{display:block;font-style:normal;color:var(--gris);font-size:11px}
+.frase .resp{background:var(--verde-claro);padding:10px 16px;font-size:12.5px;color:var(--verde-osc);font-weight:800;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.frase .resp button{background:var(--verde);color:#fff;border-radius:999px;padding:5px 11px;font-size:11.5px;font-weight:900;white-space:nowrap}
+.nota-citas{font-size:11.5px;color:var(--gris);margin-top:8px}
+
+/* ---------- denuncias (enlaces reales) ---------- */
+.denuncias{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));margin-bottom:10px}
+.den{background:#fff;border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:4px;border-top:4px solid var(--zero)}
+.den .org{font-family:var(--display);font-size:24px;line-height:1;color:var(--zero)}
+.den b{font-size:13.5px}
+.den .d{font-size:12.5px;color:var(--gris);flex:1}
+.den .lnk{display:flex;gap:8px;margin-top:6px;flex-wrap:wrap}
+.den .lnk a{background:var(--zero);color:#fff;text-decoration:none;font-weight:800;font-size:12px;padding:6px 12px;border-radius:999px}
+.den .lnk a+a{background:var(--verde)}
+.denuncias.oscuro .den{background:rgba(255,255,255,.06);border-top-color:var(--verde)}
+.denuncias.oscuro .den .org{color:var(--gota-claro)}
+.denuncias.oscuro .den b{color:#fff}
+.denuncias.oscuro .den .d{color:#9FC0C1}
+.denuncias.oscuro .den .lnk a{background:#fff;color:var(--zero)}
+.denuncias.oscuro .den .lnk a+a{background:var(--verde);color:#fff}
+
+/* ---------- colonias ---------- */
+#colonias{background:#fff;border-radius:14px;padding:18px}
+#colonias>p{color:var(--gris);margin-bottom:12px;max-width:70ch}
+.rank{display:grid;gap:7px}
+.rank .row{display:grid;grid-template-columns:22px minmax(110px,190px) 1fr 40px;align-items:center;gap:10px;font-size:13px}
+.rank .row b{font-family:var(--display);font-size:20px;color:var(--agua);font-weight:400}
+.rank .row .bar{height:12px;background:var(--fondo);border-radius:999px;overflow:hidden}
+.rank .row .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--gota),var(--zero));border-radius:999px}
+.rank .row em{font-style:normal;font-weight:900;color:var(--zero);text-align:right}
+
+/* ---------- pirámide ---------- */
+#piramide{
+  background:var(--agua-claro);border-radius:14px;padding:22px;
+  border:2px dashed var(--agua);
+}
+#piramide h2{font-family:var(--display);font-weight:400;font-size:30px;color:var(--zero);line-height:1;margin-bottom:6px}
+#piramide>p{color:var(--tinta);margin-bottom:16px;max-width:64ch}
+.niveles{display:grid;gap:9px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.niv{background:#fff;border-radius:10px;padding:13px;text-align:center}
+.niv b{display:block;font-family:var(--display);font-weight:400;font-size:40px;line-height:1;color:var(--verde)}
+.niv span{font-size:12px;color:var(--gris)}
+
+/* ---------- reseñas ---------- */
+.rejr{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
+.res{background:#fff;border-radius:12px;padding:14px}
+.res .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;gap:8px}
+.res .av{
+  width:30px;height:30px;border-radius:50%;background:var(--agua);color:#fff;
+  display:grid;place-items:center;font-weight:900;font-size:13px;flex:none;
+}
+.res .quien{display:flex;align-items:center;gap:8px;font-weight:800;font-size:12.5px}
+.res .quien i{display:block;font-style:normal;font-weight:600;color:var(--gris);font-size:11px}
+.res p{font-size:13px;color:#2B3B3C}
+.res .compro{margin-top:8px;font-size:11px;color:var(--verde-osc);font-weight:800}
+
+/* ---------- pie ---------- */
+footer{background:var(--zero-osc);color:#B9D3D4;margin-top:30px}
+footer .fw{max-width:1200px;margin:0 auto;padding:26px 14px;display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));font-size:12px;line-height:1.6}
+footer h4{color:#fff;font-size:13px;margin-bottom:6px}
+footer .legal{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.12);padding-top:14px;font-size:11px;color:#8FB0B2}
+footer b{color:#fff}
+
+/* ---------- carrito ---------- */
+#cajon{
+  position:fixed;inset:0 0 0 auto;width:min(390px,100%);background:#fff;
+  transform:translateX(100%);transition:transform .3s;z-index:100;
+  display:flex;flex-direction:column;visibility:hidden;transition:transform .3s,visibility 0s .3s;
+}
+#cajon.open{transform:none;visibility:visible;transition:transform .3s;box-shadow:-6px 0 30px rgba(0,0,0,.2)}
+#cajon .cab{background:var(--zero);color:#fff;padding:14px 16px;display:flex;justify-content:space-between;align-items:center}
+#cajon h2{font-size:16px;font-weight:900}
+.cerrar{color:#fff;font-size:24px;line-height:1}
+#items{flex:1;overflow-y:auto;padding:12px 16px}
+.item{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--linea);align-items:center}
+.item .mini{width:54px;height:54px;border-radius:8px;overflow:hidden;background:var(--fondo);flex:none}
+.item .mini img{width:100%;height:100%;object-fit:cover}
+.item .t{flex:1;font-size:12.5px;font-weight:600}
+.item .p{font-weight:900;color:var(--zero);white-space:nowrap}
+.item .quitar{color:var(--gris);font-size:18px;padding:0 4px}
+#pie-cajon{padding:14px 16px;border-top:1px solid var(--linea)}
+.linea-t{display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px;color:var(--gris)}
+.linea-t.cupon{color:var(--verde-osc);font-weight:800}
+#total{display:flex;justify-content:space-between;font-weight:900;font-size:18px;margin:8px 0 12px}
+#pagar{background:var(--verde);color:#fff;width:100%;padding:14px;border-radius:999px;font-weight:900;font-size:15px}
+#pagar:hover{background:var(--verde-osc)}
+.seguro{text-align:center;font-size:11px;color:var(--gris);margin-top:8px}
+#velo{position:fixed;inset:0;background:rgba(7,40,42,.5);z-index:90;display:none}
+#velo.open{display:block}
+
+/* ---------- ficha de producto ---------- */
+.dlg{
+  position:fixed;inset:0;z-index:150;display:none;justify-items:center;padding:16px;
+  background:rgba(7,40,42,.6);overflow-y:auto;
+}
+.dlg.open{display:grid}
+.dlg>div,#modal>.caja{margin:auto 0}
+.ficha{background:#fff;border-radius:16px;max-width:880px;width:100%;display:grid;grid-template-columns:1.05fr 1fr;overflow:hidden;position:relative}
+.ficha .x{position:absolute;top:10px;right:12px;font-size:26px;color:var(--gris);z-index:3}
+.galeria{background:var(--fondo);padding:14px}
+.galeria .grande{aspect-ratio:1;border-radius:12px;overflow:hidden;background:#fff}
+.galeria .grande img{width:100%;height:100%;object-fit:cover}
+.galeria .tn{display:flex;gap:8px;margin-top:10px}
+.galeria .tn button{width:62px;height:62px;border-radius:8px;overflow:hidden;border:2px solid transparent;padding:0}
+.galeria .tn button[aria-current="true"]{border-color:var(--verde)}
+.galeria .tn img{width:100%;height:100%;object-fit:cover}
+.fdatos{padding:22px 22px 20px;display:flex;flex-direction:column;gap:9px}
+.fdatos h3{font-size:19px;line-height:1.25;font-weight:800;padding-right:24px}
+.fdatos .precios .precio{font-size:42px}
+.fdatos .ahorro{background:var(--verde);color:#fff;font-weight:900;font-size:12px;padding:2px 8px;border-radius:4px}
+.fdatos ul{list-style:none;display:grid;gap:5px;font-size:13px}
+.fdatos li::before{content:"✓ ";color:var(--verde);font-weight:900}
+.specs{width:100%;border-collapse:collapse;font-size:12px;margin-top:2px}
+.specs td{padding:5px 0;border-bottom:1px solid var(--linea)}
+.specs td:first-child{color:var(--gris);width:52%}
+.specs td:last-child{font-weight:700}
+.fbtns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
+.fbtns .btn{text-align:center;padding:12px 10px}
+.fbtns .btn.sec{background:var(--zero)}
+
+/* ---------- cupón ---------- */
+.cupon-box{
+  background:linear-gradient(160deg,var(--zero),var(--gota));color:#fff;border-radius:18px;max-width:360px;width:100%;
+  padding:26px 22px 22px;text-align:center;position:relative;
+}
+.cupon-box .x{position:absolute;top:8px;right:12px;font-size:24px;color:#fff}
+.cupon-box img{width:70px;height:70px;margin:0 auto 8px;background:#fff;border-radius:50%;padding:4px}
+.cupon-box h3{font-family:var(--display);font-weight:400;font-size:34px;line-height:.95}
+.cupon-box .ticket{background:#fff;color:var(--zero);border-radius:12px;margin:14px 0;padding:14px;border:2px dashed var(--verde)}
+.cupon-box .ticket b{display:block;font-family:var(--display);font-weight:400;font-size:52px;line-height:.9;color:var(--verde)}
+.cupon-box .ticket span{font-size:12px;font-weight:800}
+.cupon-box small{display:block;margin-top:10px;font-size:10.5px;opacity:.8}
+
+/* ---------- toast ---------- */
+#toast{
+  position:fixed;left:14px;bottom:14px;z-index:80;background:#fff;border-radius:12px;
+  box-shadow:0 8px 28px rgba(7,40,42,.22);display:flex;gap:10px;align-items:center;padding:8px 12px 8px 8px;
+  max-width:320px;transform:translateY(140%);transition:transform .4s;font-size:12px
+}
+#toast.show{transform:none}
+#toast img{width:44px;height:44px;border-radius:8px;object-fit:cover;flex:none}
+#toast b{color:var(--zero)}
+#toast i{display:block;font-style:normal;color:var(--gris);font-size:11px}
+
+/* ---------- revelación ---------- */
+#modal{
+  position:fixed;inset:0;z-index:200;display:none;
+  justify-items:center;padding:18px;background:rgba(4,22,24,.95);overflow-y:auto;
+}
+#modal.open{display:grid}
+.caja{
+  background:var(--zero-osc);color:#E4F0F0;max-width:680px;width:100%;
+  border-radius:16px;padding:30px;border:1px solid #1A5E61;
+}
+.caja .sello-r{display:inline-block;font-weight:900;font-size:11px;letter-spacing:1.4px;background:var(--verde);color:#fff;padding:3px 9px;border-radius:4px;margin-bottom:12px}
+.caja h2{font-family:var(--display);font-weight:400;font-size:clamp(34px,6vw,50px);line-height:.95;margin-bottom:14px;color:#fff}
+.caja p{margin-bottom:13px;font-size:14.5px;line-height:1.55;color:#C3D9DA}
+.caja ul{margin:0 0 16px;list-style:none;display:grid;gap:9px}
+.caja li{background:rgba(255,255,255,.05);border-left:3px solid var(--verde);border-radius:6px;padding:10px 12px;font-size:13.5px;line-height:1.5;color:#C3D9DA}
+.caja li b{color:#fff;display:block;margin-bottom:2px}
+.cifras{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin:6px 0 16px}
+.cifras div{background:rgba(255,255,255,.06);border-radius:10px;padding:12px}
+.cifras b{display:block;font-family:var(--display);font-weight:400;font-size:38px;line-height:1;color:var(--gota-claro)}
+.cifras span{font-size:11.5px;color:#9FC0C1;line-height:1.3;display:block}
+.caja details{margin:4px 0 16px;font-size:12px;color:#9FC0C1}
+.caja summary{cursor:pointer;font-weight:800;color:#fff}
+.caja details ol{margin:8px 0 0 18px;display:grid;gap:4px}
+.caja .acciones{display:flex;gap:10px;flex-wrap:wrap}
+.caja .acciones a{text-decoration:none}
+
+#rejilla,#relampago,#colonias,#piramide,#cats,#denunciar{scroll-margin-top:90px}
+
+@media(max-width:860px){
+  .hlinks{display:none}
+}
+@media(max-width:700px){
+  #presion{grid-template-columns:1fr}
+  #presion svg{min-height:160px;max-height:200px}
+  #etiqueta-wrap{grid-template-columns:1fr}
+  .ficha{grid-template-columns:1fr}
+  .galeria .grande{max-width:340px;margin:0 auto}
+  .galeria .tn{justify-content:center}
+}
+@media(max-width:600px){
+  .logo img.wm{display:none}
+  .logo img.circ{width:38px;height:38px}
+  .carrito span.txt{display:none}
+  #garantias{gap:10px;font-size:11px}
+  #banner{grid-template-columns:1fr;padding:22px 18px}
+  #banner .heroimg{width:62%;justify-self:center;margin-top:6px}
+  #rejilla{grid-template-columns:repeat(2,1fr);gap:8px}
+  .precio{font-size:24px}
+  .rank .row{grid-template-columns:20px 1fr 34px}
+  .rank .row .bar{grid-column:2/3}
+  .rank .row em{grid-row:1/3;grid-column:3}
+  .caja{padding:22px 18px}
+  #toast{left:10px;right:10px;bottom:10px;max-width:none;padding:6px 10px 6px 6px;font-size:11.5px}
+  #toast img{width:36px;height:36px}
+  #urgencia{font-size:11.5px;padding:5px 10px;gap:6px}
+  .reloj span{min-width:22px;padding:0 4px}
+  header.top{padding:8px 10px}
+  .hwrap{gap:8px}
+  .buscar input{font-size:16px;padding:7px 12px}
+  .buscar button{padding:0 12px;font-size:13px}
+  .carrito{padding:8px 11px}
+  #garantias{flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;white-space:nowrap}
+  #garantias,#cats,#fila{scrollbar-width:none}
+  #garantias::-webkit-scrollbar,#cats::-webkit-scrollbar,#fila::-webkit-scrollbar{display:none}
+  main{padding:10px}
+  .sec-t{flex-direction:column;align-items:flex-start;gap:3px;margin:20px 0 10px}
+  .sec-t h2,#relampago h2,#piramide h2{font-size:27px}
+  .viendo{font-size:10px;padding:3px 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .viendo .pv{display:none}
+  .info{padding:9px 9px 11px}
+  .add{padding:10px 6px}
+  .niveles{grid-template-columns:repeat(2,1fr)}
+  .niv b{font-size:34px}
+  #colonias,#piramide{padding:16px 14px}
+  #presion .txt{padding:20px 18px}
+  .ficha{overflow:clip}
+  .fdatos{padding:18px 16px 0}
+  .fbtns{position:sticky;bottom:0;background:#fff;padding:10px 0 14px;margin-top:0;box-shadow:0 -8px 12px -8px rgba(0,0,0,.12)}
+  .dlg{padding:10px}
+  #modal{padding:10px}
+  .cupon-box{padding:22px 16px 18px}
+}
+@media(max-width:360px){
+  .buscar button{font-size:0;padding:0 10px}
+  .buscar button::before{content:"🔍";font-size:15px}
+  .carrito{padding:7px 9px}
+  #rejilla{gap:6px}
+  .nom{font-size:12.5px}
+  .precio{font-size:22px}
+  .antes{font-size:11px}
+}
+</style>
+</head>
+<body>
+
+<div id="urgencia">
+  <span>⚡ OFERTAS DE TEMPORAL — hasta 90% de descuento</span>
+  <span class="reloj"><span id="h">00</span>:<span id="m">00</span>:<span id="s">00</span></span>
+  <span>¡Antes de la próxima tormenta!</span>
+</div>
+
+<header class="top">
+  <div class="hwrap">
+    <a class="logo" href="#" aria-label="Inicio">
+      <img class="circ" src="img/logo.png" alt="">
+      <img class="wm" src="img/wordmark.png" alt="AGUA ZERO">
+    </a>
+    <form class="buscar" onsubmit="filtrar();return false">
+      <input id="q" placeholder="Busca: olor, turbia, piel, inundación…" aria-label="Buscar">
+      <button type="submit">Buscar</button>
+    </form>
+    <nav class="hlinks"><a href="#relampago">Relámpago</a><a href="#colonias">Tu colonia</a><a href="#piramide">Gana dinero</a><a href="#denunciar">Denunciar</a></nav>
+    <button class="carrito" id="btncar" onclick="abrirCarrito()">🛒 <span class="txt">Carrito</span> <b id="ncar">0</b></button>
+  </div>
+</header>
+
+<div id="garantias">
+  <span>Envío gratis desde $299</span>
+  <span>Entrega aunque tu calle esté inundada*</span>
+  <span>Devolución en 90 días</span>
+  <span>Pago 100% seguro</span>
+</div>
+
+<main>
+  <section id="banner">
+    <div>
+      <span class="eyebrow">NUEVO · HECHO PARA LA ZMG</span>
+      <h1>¿Tu agua huele a caño?<br>Tápate la nariz.<br>Te vendemos con qué.</h1>
+      <p>Productos de cuidado personal para vivir con el agua que te llega. Llegan a tu casa antes que la pipa. Ya los usan vecinos de más de 600 colonias.</p>
+      <div class="ctas">
+        <button class="btn" onclick="document.getElementById('cats').scrollIntoView({behavior:'smooth',block:'center'})">Ver productos</button>
+        <button class="btn blanco" onclick="abrirFicha('kit')">Kit Temporal −93%</button>
+      </div>
+    </div>
+    <div class="heroimg">
+      <img src="img/tapones-2.jpg" alt="Tapones nasales AGUA ZERO">
+      <div class="sello"><b>-90%</b>SOLO HOY</div>
+    </div>
+  </section>
+
+  <section id="envio">
+    <p id="envio-txt">Te faltan $299.00 para ENVÍO GRATIS 🚚</p>
+    <div class="barra"><i id="barra"></i></div>
+  </section>
+
+  <section id="relampago">
+    <div class="cab">
+      <h2>⚡ Ofertas <em>relámpago</em></h2>
+      <span class="reloj" aria-hidden="true" style="color:var(--gris);font-weight:800;font-size:12px">Termina en&nbsp;<span id="h2">00</span>:<span id="m2">00</span>:<span id="s2">00</span></span>
+    </div>
+    <div id="fila"></div>
+  </section>
+
+  <section id="presion">
+    <div class="txt">
+      <span class="eyebrow">EVENTO ESPECIAL · 11 DE OCTUBRE</span>
+      <h2>¿Baja presión en tu llave?<br><em>Frente a Casa Jalisco salió a chorros.</em></h2>
+      <p>Agua a presión, cortesía de un camión de Bomberos, con gas lacrimógeno de regalo y efectos de sonido incluidos. Solo para quienes fueron a pedir agua limpia. Para la próxima, ve preparado.</p>
+      <div class="ctas">
+        <button class="btn" onclick="abrirFicha('manifestante')">Ver Kit Manifestante</button>
+        <span class="chip">16.4% de los hogares reporta baja presión en casa</span>
+      </div>
+      <p class="ast">*Promoción válida solo en protestas por agua limpia, frente a Casa Jalisco.</p>
+    </div>
+    <svg viewBox="0 0 420 300" preserveAspectRatio="xMidYMax meet" aria-hidden="true">
+      <defs><linearGradient id="jet" x1="1" y1="0" x2="0" y2="0"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset="1" stop-color="#A9CBE6" stop-opacity=".15"/></linearGradient></defs>
+      <!-- gas -->
+      <g fill="#fff" opacity=".13"><circle cx="70" cy="230" r="70"/><circle cx="150" cy="250" r="64"/><circle cx="30" cy="160" r="50"/><circle cx="120" cy="180" r="40"/></g>
+      <!-- multitud con pancartas -->
+      <g fill="#071F21">
+        <circle cx="40" cy="232" r="11"/><rect x="28" y="244" width="24" height="56" rx="10"/>
+        <circle cx="78" cy="226" r="12"/><rect x="65" y="239" width="26" height="61" rx="10"/>
+        <circle cx="118" cy="234" r="11"/><rect x="106" y="246" width="24" height="54" rx="10"/>
+        <circle cx="156" cy="228" r="12"/><rect x="143" y="241" width="26" height="59" rx="10"/>
+        <rect x="76" y="168" width="4" height="62"/><rect x="154" y="176" width="4" height="56"/>
+      </g>
+      <rect x="44" y="150" width="68" height="30" rx="3" fill="#fff"/>
+      <text x="78" y="170" text-anchor="middle" font-family="Impact,'Arial Narrow',sans-serif" font-size="14" fill="#0B5E62">AGUA LIMPIA</text>
+      <rect x="126" y="160" width="62" height="26" rx="3" fill="#1DAA3C"/>
+      <text x="157" y="178" text-anchor="middle" font-family="Impact,'Arial Narrow',sans-serif" font-size="12" fill="#fff">AGUA LIMPIA YA</text>
+      <!-- camión de bomberos -->
+      <rect x="300" y="200" width="118" height="70" rx="8" fill="#B9E0F2" opacity=".28"/>
+      <rect x="330" y="170" width="70" height="36" rx="6" fill="#B9E0F2" opacity=".28"/>
+      <rect x="306" y="214" width="40" height="22" rx="3" fill="#fff" opacity=".18"/>
+      <circle cx="322" cy="276" r="15" fill="#071F21"/><circle cx="392" cy="276" r="15" fill="#071F21"/>
+      <path d="M340 172 L318 156" stroke="#fff" stroke-width="9" stroke-linecap="round"/>
+      <!-- chorro a presión -->
+      <path d="M318 150 Q220 110 70 196 L80 212 Q228 136 320 162 Z" fill="url(#jet)"/>
+      <g fill="#fff" opacity=".8"><circle cx="78" cy="214" r="5"/><circle cx="58" cy="204" r="4"/><circle cx="98" cy="222" r="4"/><circle cx="44" cy="218" r="3"/><circle cx="66" cy="190" r="3"/></g>
+      <rect x="0" y="296" width="420" height="4" fill="#A9CBE6" opacity=".35"/>
+    </svg>
+  </section>
+
+  <div class="sec-t"><h2>Recomendados para tu colonia</h2><span id="conteo"></span></div>
+  <nav id="cats" aria-label="Categorías"></nav>
+  <section id="rejilla"></section>
+
+  <div class="sec-t"><h2>🧪 Tu agua ya viene fortificada</h2><span>¡Ingredientes extra sin costo!</span></div>
+  <section id="etiqueta-wrap">
+    <div class="nutri" id="nutri"></div>
+    <div class="efectos" id="efectos"></div>
+  </section>
+
+  <div class="sec-t"><h2>📍 Lo más pedido por colonia</h2><span>Actualizado: septiembre 2026</span></div>
+  <section id="colonias">
+    <p>Estas colonias lideran los pedidos en toda el Área Metropolitana. Ya registramos más de 520 colonias distintas; busca la tuya.</p>
+    <div class="rank" id="rank"></div>
+  </section>
+
+  <div class="sec-t"><h2>🎙️ Frases oficiales del temporal</h2><span>Citas textuales con respuesta de la casa</span></div>
+  <section id="frases"></section>
+  <p class="nota-citas">Citas textuales tomadas de medios (fuentes al finalizar la compra). Las respuestas en verde son de AGUA ZERO. Las autoridades citadas no respaldan esta tienda.</p>
+
+  <div class="sec-t"><h2>🏆 Programa Vecino Distribuidor</h2></div>
+  <section id="piramide">
+    <p>Tu colonia tiene el problema. Tú tienes la solución. Invita a tus vecinos y recupera tu inversión mientras toda la cuadra accede al agua que se merece… o por lo menos deja de olerla.</p>
+    <div class="niveles">
+      <div class="niv"><b>3</b><span>vecinos inscritos<br>= tus tapones gratis</span></div>
+      <div class="niv"><b>9</b><span>de segundo nivel<br>= 15% de comisión</span></div>
+      <div class="niv"><b>27</b><span>de tercer nivel<br>= rango Gota Plata</span></div>
+      <div class="niv"><b>81</b><span>de cuarto nivel<br>= Embajador del Temporal</span></div>
+    </div>
+  </section>
+
+  <div class="sec-t"><h2>⭐ Clientes satisfechos de tu zona</h2><span>4.9 de 5 · 190k reseñas</span></div>
+  <section class="rejr" id="rejr"></section>
+
+  <div class="sec-t" id="denunciar"><h2>📣 Reporta y denuncia</h2><span>Enlaces reales a dependencias y organizaciones</span></div>
+  <section class="denuncias" id="denuncias"></section>
+  <p class="nota-citas" id="tipden"></p>
+</main>
+
+<footer>
+  <div class="fw">
+    <div><h4 id="razon">AGUA ZERO S.A. de C.V.</h4>Proveedor privado de soluciones hídricas personales. Sin relación con organismos operadores municipales o estatales.</div>
+    <div><h4>Atención a clientes</h4>Respondemos en 5 minutos.<br>Para el agua de tu casa: <a href="#denunciar" style="color:#fff;font-weight:800">reporta y denuncia aquí</a>.</div>
+    <div><h4>Políticas</h4>Aviso de privacidad · Términos y condiciones · Envíos · Devoluciones · Licitaciones</div>
+    <div class="legal">
+      <p>*Entrega sujeta a la altura del agua. Los productos aquí ofrecidos son de carácter personal, cosmético y perceptual. No modifican la composición del agua, la infraestructura de distribución, el drenaje ni la estabilidad del subsuelo. Los resultados mostrados son ilustrativos. La empresa no se hace responsable por inundaciones, hundimientos, afectaciones a la piel, al estómago o a los ojos, ni por la persistencia del problema una vez aplicado el producto. La satisfacción declarada por el cliente constituye la única métrica de eficacia reconocida por esta empresa.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- carrito -->
+<div id="velo" onclick="cerrarCarrito()"></div>
+<aside id="cajon" aria-label="Carrito">
+  <div class="cab"><h2>Tu carrito</h2><button class="cerrar" onclick="cerrarCarrito()" aria-label="Cerrar">×</button></div>
+  <div id="items"></div>
+  <div id="pie-cajon">
+    <div class="linea-t"><span>Subtotal</span><span id="msub">$0.00</span></div>
+    <div class="linea-t cupon" id="lcupon" hidden><span>Cupón BIENVENIDA</span><span>−$100.00</span></div>
+    <div class="linea-t"><span>Envío</span><span id="menvio">$89.00</span></div>
+    <div id="total"><span>Total</span><span id="mtotal">$0.00</span></div>
+    <button id="pagar" onclick="pagar()">Pagar ahora</button>
+    <p class="seguro">🔒 Pago cifrado · Tus datos están más protegidos que tu tubería</p>
+  </div>
+</aside>
+
+<!-- ficha de producto -->
+<div class="dlg" id="dlgficha" onclick="if(event.target===this)cerrarFicha()">
+  <div class="ficha" id="ficha"></div>
+</div>
+
+<!-- cupón de bienvenida -->
+<div class="dlg" id="dlgcupon" onclick="if(event.target===this)cerrarCupon()">
+  <div class="cupon-box">
+    <button class="x" onclick="cerrarCupon()" aria-label="Cerrar">×</button>
+    <img src="img/logo.png" alt="">
+    <h3>¡Felicidades!<br>Tu colonia califica</h3>
+    <div class="ticket"><b>$100</b><span>de descuento en tu primera compra</span></div>
+    <button class="btn" style="width:100%" onclick="aceptarCupon()">Aceptar y comprar</button>
+    <small>Exclusivo para domicilios con reporte de agua turbia, maloliente o con sedimentos. Es decir: casi todos.</small>
+  </div>
+</div>
+
+<!-- notificación de compra -->
+<div id="toast" aria-live="polite"></div>
+
+<!-- la grieta -->
+<div id="modal" role="dialog" aria-modal="true" aria-labelledby="mt">
+  <div class="caja">
+    <span class="sello-r">PEDIDO NO PROCESADO</span>
+    <h2 id="mt"></h2>
+    <div id="mc"></div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   1. MARCA
+   ============================================================ */
+const MARCA = {
+  nombre:"AGUA ZERO",
+  bajada:"Soluciones para el agua que te tocó",
+  razon:"AGUA ZERO S.A. de C.V."
+};
+
+/* ============================================================
+   2. LA GRIETA — true revela la sátira al intentar pagar
+   ============================================================ */
+const REVELAR = true;
+
+/* ============================================================
+   3. PRODUCTOS
+   `img`  = fotos (la primera es la portada).
+   `dato` = la cifra real que el producto está tapando.
+   ============================================================ */
+const PRODUCTOS = [
+ {id:"tapones", cat:"Olor", nom:"Tapones nasales AGUA ZERO — bloquea olores, partículas y agua contaminada",
+  claim:"Lava trastes, báñate y abre la llave sin enterarte de nada.",
+  precio:189, antes:1890, est:4.9, vend:"41k", quedan:3, rel:91,
+  img:["img/tapones-1.jpg","img/tapones-2.jpg"],
+  puntos:["Bloquea el olor a caño en 0.3 segundos","3 tallas + estuche de viaje + bolsita","Compatible con regadera, lavabo y fregadero","Reutilizables: el problema también lo es"],
+  specs:[["Material","Silicón grado médico"],["Contenido","6 tapones, 1 estuche"],["¿Mejora el agua?","No"]],
+  dato:"964 de 1,477 personas consultadas por IMDEC (65.3%) reportan agua con mal olor. Una de ellas lo resumió así: «Agua sucia con olor a caño desde inicio de 2026»."},
+
+ {id:"locion", cat:"Olor", nom:"Loción para no oler feo — neutraliza olores por exposición a aguas contaminadas",
+  claim:"Fórmula de larga duración: dura más que el tandeo.",
+  precio:249, antes:2290, est:4.8, vend:"28k", quedan:5, rel:78,
+  img:["img/locion-1.jpg","img/locion-2.jpg"],
+  puntos:["Neutraliza malos olores de la piel y el cabello","Fórmula de larga duración","Segura para la piel (más que el agua de tu llave)","Aroma «recién llovió, sin inundación»"],
+  specs:[["Contenido","100 mL"],["Aroma","Carbón activado y hierbabuena"],["¿Quita el olor del agua?","No"]],
+  dato:"Junto al Río San Juan de Dios, en Huentitán El Bajo, siguen saliendo olores fétidos por descargas residuales históricas que las plantas de tratamiento no han podido mitigar. Alrededor del 70.53% del territorio de Guadalajara drena hacia esa barranca."},
+
+ {id:"jabon", cat:"Piel", nom:"Jabón de manos extra fuerte (contra aguas negras) — limpieza profunda",
+  claim:"Para lavarte las manos después de lavarte las manos.",
+  precio:159, antes:1590, est:4.9, vend:"56k", quedan:4, rel:86,
+  img:["img/jabon-1.jpg","img/jabon-2.jpg"],
+  puntos:["Elimina suciedad, residuos y malos olores","Cuida tu piel de lo que sale de tu llave","Con extracto de hojas y carbón","Rinde hasta 120 lavadas con agua turbia"],
+  specs:[["Contenido","100 mL"],["pH","Neutro, como la respuesta institucional"],["¿Sustituye al agua potable?","No"]],
+  dato:"51.9% de los hogares consultados afirma que alguien en casa se enfermó por el agua; en 66% de esos testimonios, la afectación fue en la piel: comezón, dermatitis, ronchas. Vecinos de la Unidad Mariano Otero y la colonia Industrial exigen condonar recibos porque el SIAPA cobra agua potable y entrega aguas negras."},
+
+ {id:"filtro", cat:"Purificación", nom:"Filtro de bolsillo AGUA ZERO — agua más segura en cualquier lugar (incluida tu cocina)",
+  claim:"Filtra bacterias y sedimentos. Ideal para viajes, campismo y tu propia casa.",
+  precio:399, antes:3990, est:4.8, vend:"33k", quedan:1, rel:96,
+  img:["img/filtro-1.jpg","img/filtro-2.jpg"],
+  puntos:["Filtra bacterias y sedimentos","Ligero, portátil y con mosquetón","Ideal para actividades al aire libre… y bajo techo","Más barato que 1 año de garrafones*"],
+  specs:[["Capacidad","Hasta 1,000 L"],["Metales pesados","Consultar con su organismo operador"],["¿Arregla la red?","No"]],
+  dato:"En el monitoreo ciudadano de IMDEC (256 muestras, 110 colonias) apareció plomo en 32 muestras, mercurio en 17, aluminio en 15 y coliformes fecales en 6 puntos. En otro muestreo, 93.48% de las muestras no tenía cloro residual. Y 126 familias consultadas pagan garrafones además de la tarifa."},
+
+ {id:"popote", cat:"Temporal", nom:"Popote con filtro AGUA ZERO — hidratación segura en plena inundación",
+  claim:"Si el agua ya entró a tu casa, por lo menos aprovéchala.",
+  precio:299, antes:2990, est:4.7, vend:"19k", quedan:2, rel:72,
+  img:["img/popote-1.jpg","img/popote-2.jpg"],
+  puntos:["Filtra bacterias y sedimentos","Reutilizable y ecológico","Ideal para la sala, la cochera y la estación del Tren Ligero","Incluye cordón para no perderlo en la corriente"],
+  specs:[["Longitud","23 cm"],["Profundidad de uso","Hasta 170 cm de inundación"],["¿Evita la inundación?","No"]],
+  dato:"El 28 de junio de 2025 una sola lluvia dañó cerca de 150 viviendas en El Deán, San Carlos y San Andrés; el agua llegó casi a un metro: «todo salía de las alcantarillas». Junto a la estación Isla Raza del Tren Ligero se han contado 96 inundaciones de hasta 170 cm."},
+
+ {id:"traje", cat:"Temporal", nom:"Traje de lluvia transparente AGUA ZERO — protección total en días de lluvia e inundaciones",
+  claim:"100% impermeable. Para cruzar la calle, subir al Macro o bañarte.",
+  precio:459, antes:4590, est:4.8, vend:"12k", quedan:3, rel:64,
+  img:["img/traje-1.jpg","img/traje-2.jpg"],
+  puntos:["100% impermeable, con capucha y cierre hermético","Ligero, transpirable y fácil de guardar","Transparente: para que se vea quién se está mojando","Talla única, como el temporal"],
+  specs:[["Material","PVC translúcido"],["Uso recomendado","Junio a octubre, y lo que se acumule"],["¿Tapa el socavón?","No"]],
+  dato:"Cinco puntos del circuito del Macrobús son de alto riesgo por inundación; en San Juan de Dios el agua ha llegado a metro y medio. El Inventario de Peligros documenta 2,693 hundimientos desde 2010, la mayoría por fallas en redes de agua y drenaje de entre 30 y 70 años."},
+
+ {id:"manifestante", cat:"Protesta", nom:"Kit Manifestante AGUA ZERO — goggles + pañuelo para exigir agua limpia",
+  claim:"Para cuando el agua por fin te llega con presión. Llorar es opcional.",
+  precio:349, antes:3490, est:4.9, vend:"4.5k", quedan:1, rel:99, nuevo:true,
+  img:["img/manifestante-1.svg","img/manifestante-2.svg"],
+  puntos:["Goggles antiempañantes: para ver de dónde viene el chorro","Pañuelo de algodón con sello AGUA ZERO","Probado contra camión de Bomberos a presión real","Edición conmemorativa 11 de octubre"],
+  specs:[["Presión soportada","La de Casa Jalisco"],["Detenciones","No incluidas (pero hubo 39)"],["¿Garantiza tu derecho a protestar?","No"]],
+  dato:"El 11 de octubre de 2026 una marcha por agua limpia salió de la Minerva hacia Casa Jalisco (4,500 personas según Protección Civil; más de 10 mil según convocantes). La respuesta fue agua a presión desde un camión de Bomberos de Guadalajara, gas lacrimógeno y petardos aturdidores. El gobernador reportó 39 detenidos y habló de un «grupo de choque»; dos días después admitió que «algunos elementos policiales cometieron excesos» y liberaron a todos los detenidos. La consigna: «¡No es agua, es veneno!»."},
+
+ {id:"kit", cat:"Kits", kit:true, nom:"Kit Temporal Completo AGUA ZERO — los 6 productos para sobrevivir a tu colonia",
+  claim:"Tapones, loción, jabón, filtro, popote y traje. Todo lo que te toca comprar por tu cuenta.",
+  precio:1199, antes:17990, est:5.0, vend:"9.8k", quedan:2, rel:98,
+  img:["img/traje-2.jpg","img/tapones-2.jpg","img/locion-2.jpg","img/jabon-2.jpg","img/filtro-2.jpg","img/popote-2.jpg"],
+  puntos:["Incluye los 6 productos AGUA ZERO","Ahorra $16,791 contra precio de lista","Caja de regalo (ideal para tu diputado local)","Renovación automática cada temporal"],
+  specs:[["Piezas","6"],["Garantía","Mientras dure la crisis"],["¿Resuelve la crisis?","No"]],
+  dato:"La fase más crítica empezó entre diciembre de 2025 y enero de 2026; para julio eran 650 colonias con agua turbia o maloliente. De las 784 personas que reportaron su caso al SIAPA, solo 6 vieron su problema resuelto: 0.77%."}
+];
+
+/* ============================================================
+   4. COLONIAS — "pedidos" = reportes ciudadanos por colonia,
+   consulta #ElSiapaQueQueremos (IMDEC, mar–sep 2026, n=1,477)
+   ============================================================ */
+const COLONIAS = [
+ ["Colinas de Tonalá",60],["Americana",46],["Jardines del Country",34],["Miravalle",34],
+ ["Centro (Guadalajara)",25],["Del Fresno",24],["Pinar de la Calma",23],["Moderna",23],
+ ["Vistas del Pedregal",19],["Nueva Primavera",18]
+];
+
+const RESENAS = [
+ {n:"Rosa M.", col:"Colinas de Tonalá", p:"tapones", t:"Llegaron en 3 días. Ya puedo lavar los trastes sin que me den náuseas. Cinco estrellas."},
+ {n:"Don Beto", col:"Americana", p:"jabon", t:"El jabón quita lo negro de las manos. Lo de la llave sigue igual, pero ya me acostumbré."},
+ {n:"Karla V.", col:"Miravalle", p:"manifestante", t:"Fui a la marcha del 11 de octubre. Fue la primera vez en meses que me cayó agua con presión. Los goggles me salvaron."},
+ {n:"Cliente verificado", col:"El Deán", p:"popote", t:"El popote funciona perfecto. Lo probé en mi sala."},
+ {n:"Fer G.", col:"Jardines del Country", p:"traje", t:"Lo pedí para el temporal y ahora también lo uso para bañarme. Muy versátil."},
+ {n:"Sra. Lupe", col:"Oblatos", p:"locion", t:"Llevo 8 meses esperando respuesta de mi reporte. Aquí me contestaron en 5 minutos. Servicio de diez."}
+];
+
+/* ============================================================
+   5. FRASES — citas textuales de autoridades (con fuente) y la
+   "respuesta" de la tienda, que lleva a un producto.
+   ============================================================ */
+const FRASES = [
+ {q:"Una crisis de agua potable como nunca antes.", who:"Pablo Lemus", cargo:"Gobernador de Jalisco · 6 oct 2026",
+  r:"Por eso tenemos ofertas como nunca antes.", p:"kit"},
+ {q:"He girado las instrucciones para garantizar que la marcha se dé de una manera ordenada y segura.", who:"Pablo Lemus", cargo:"Gobernador · 10 oct 2026, un día antes de la marcha",
+  r:"Y llegó agua a presión. Ordenadísima.", p:"manifestante"},
+ {q:"El servicio de agua potable no se privatizará, no se contratará deuda y no aumentarán las tarifas de agua que paga la ciudadanía.", who:"Pablo Lemus", cargo:"Gobernador · 12 oct 2026, tras la represión",
+  r:"Tranquilo: privatizamos nosotros, un carrito a la vez.", p:"filtro"},
+ {q:"Algunos elementos policiales cometieron excesos y los tenemos identificados.", who:"Pablo Lemus", cargo:"Gobernador · 13 oct 2026",
+  r:"Nosotros también tenemos identificado tu carrito.", p:"manifestante"},
+ {q:"Llegará menos agua a nuestra ciudad, pero será de mejor calidad.", who:"Verónica Delgadillo", cargo:"Presidenta municipal de Guadalajara · 16 oct 2026",
+  r:"Menos agua, más popotes.", p:"popote"},
+ {q:"No encontramos metales pesados como mercurio, arsénico, plomo, etcétera.", who:"Secretaría de Salud Jalisco", cargo:"Sobre 270 muestras de plantas potabilizadoras · 2026",
+  r:"Monitoreo ciudadano IMDEC: plomo en 32 de 256 muestras.", p:"filtro"}
+];
+
+/* ============================================================
+   6. CONTAMINANTES — la "tabla nutrimental" del agua de la llave
+   ============================================================ */
+const NUTRI = {
+  porcion:"1 vaso de agua de la llave, ZMG",
+  filas:[
+    ["Cloro residual","ausente en 93.48%",0,"184 muestras, 90 colonias"],
+    ["Metales pesados","",1],
+    ["Plomo","32 de 256 muestras",2],
+    ["Mercurio","17 de 256",2],
+    ["Aluminio","15 de 256",2],
+    ["Hierro","9 de 256",2],
+    ["Coliformes fecales","6 puntos",0],
+    ["E. coli","2 de 21 pruebas",0],
+    ["Fluoruros","17 de 42 muestras",0],
+    ["Nitratos y nitritos","8 de 42 muestras",3]
+  ],
+  pie:"Fuentes: monitoreo ciudadano IMDEC (256 muestras en 110 colonias, actualización oct 2026); estudio «Agua peligrosa del SIAPA» (184 muestras, mar–jun 2026); monitoreo con apoyo de ITESO (42 muestras, abr 2026). En la cuenca del Río Santiago la CEA reporta además arsénico, cadmio, cromo y zinc. Son muestras ciudadanas tomadas casa por casa, sin valor estadístico para toda la red."
+};
+const EFECTOS = [
+ {t:"Plomo", d:"Daño neurológico, anemia y problemas renales.", p:"filtro"},
+ {t:"Aluminio", d:"Neurotóxico con exposición prolongada.", p:"filtro"},
+ {t:"Nitratos", d:"Síndrome del «bebé azul» en lactantes.", p:"filtro"},
+ {t:"Fluoruros", d:"Pueden afectar la estructura ósea.", p:"filtro"},
+ {t:"E. coli / coliformes", d:"Contaminación fecal: fuente directa de infección. IMDEC registra casos de dermatitis y salmonelosis.", p:"jabon"},
+ {t:"Sin cloro residual", d:"Riesgo microbiológico. Ni hervirla la vuelve potable, advierte el estudio.", p:"popote", promo:true}
+];
+
+/* ============================================================
+   7. DENUNCIA — enlaces reales para reportar y denunciar
+   ============================================================ */
+const DENUNCIAS = [
+ {org:"SIAPA", t:"Reporta agua turbia, con olor o sin servicio", d:"Formulario de quejas o Siapatel 33 3668 2482. Pide tu folio y guárdalo.",
+  url:"https://www.siapa.gob.mx/quejas-y-sugerencias", tel:"+523336682482"},
+ {org:"CEDHJ", t:"Queja por violación al derecho humano al agua", d:"Si el SIAPA ignora tu reporte, o por abusos policiales como los del 11 de octubre.",
+  url:"https://cedhj.org.mx/queja"},
+ {org:"COPRISJAL", t:"Riesgo sanitario en Jalisco", d:"Comisión estatal contra riesgos sanitarios: agua que afecta tu salud.",
+  url:"https://coprisjal.jalisco.gob.mx/"},
+ {org:"COFEPRIS", t:"Denuncia sanitaria federal", d:"Para hechos u omisiones que ponen en riesgo la salud.",
+  url:"https://www.gob.mx/cofepris/acciones-y-programas/denuncias-sanitarias"},
+ {org:"PROFEPA", t:"Denuncia ambiental", d:"Descargas y lixiviados en el Río Santiago, la barranca de Huentitán y otros cauces.",
+  url:"https://www.gob.mx/profepa/acciones-y-programas/denuncia-ambiental"},
+ {org:"IMDEC", t:"Diagnóstico ciudadano del agua", d:"Busca tu colonia en el mapa y suma tu caso al expediente ciudadano.",
+  url:"https://www.imdecdhagua.org/diagnostico-metropolitano-agua/"}
+];
+const TIP_DENUNCIA = "Antes de reportar, junta tu número de contrato, domicilio y colonia, fotos o video del agua, la fecha y el recibo. Guarda cada folio: sirve para escalar la queja a la CEDHJ.";
+const tarjetasDenuncia = () => DENUNCIAS.map(x=>`
+  <div class="den">
+    <span class="org">${x.org}</span><b>${x.t}</b><span class="d">${x.d}</span>
+    <div class="lnk"><a href="${x.url}" target="_blank" rel="noopener">Ir al sitio ↗</a>${x.tel?`<a href="tel:${x.tel}">Llamar</a>`:""}</div>
+  </div>`).join("");
+
+const NOMBRES = ["Ana","Jorge","Mari","Luis","Paty","Toño","Sofi","Rubén","Clau","Memo","Lety","Iván"];
+
+const FUENTES = [
+ "IMDEC (2026). Diagnóstico metropolitano: ¿Cómo está el agua en tu colonia? Consulta #ElSiapaQueQueremos, n=1,477.",
+ "El Occidental (8 jul 2026). Ya son siete meses de crisis de agua en la ZMG; 650 colonias con agua turbia y maloliente.",
+ "UdGTV (7 jul 2026). El largo colapso del SIAPA: la historia detrás del agua que hoy indigna a Guadalajara.",
+ "NTR Guadalajara (4 jun 2026). Inundaciones afectan rutas de Macro y Tren.",
+ "Telediario (28 jun 2025). Lluvia daña alrededor de 150 viviendas en Guadalajara.",
+ "El Informador (sep 2026). Las verdaderas causas de los socavones en Guadalajara.",
+ "Meganoticias (22 jun 2026). Zonas de Guadalajara con más riesgo de hundimientos.",
+ "Ficha Huentitán / Río Santiago (2026): CEA Jalisco, SIAPA, Georiesgos Jalisco, IMEPLAN.",
+ "Proceso (11 oct 2026). Chorros de agua a presión, gas y bombas aturdidoras contra protesta por agua limpia en Guadalajara.",
+ "Expansión Política (11 y 13 oct 2026). Protesta por agua sucia en Guadalajara; Lemus admite excesos policiales y libera a detenidos.",
+ "Infobae (10–12 oct 2026). Lemus: «todo el derecho de expresarse»; justifica actuación policial y descarta privatizar el agua.",
+ "UdGTV (16 oct 2026). Guadalajara reprogramará obras y ajustará presupuesto para atender crisis del agua: Verónica Delgadillo.",
+ "Proceso (24 abr 2026). Detectan metales y contaminación fecal en el agua potable de la ZMG.",
+ "La Jornada (1 jul 2026). Agua sin cloro en 93% de muestras; indicios de E. coli y metales pesados.",
+ "Azteca Jalisco / N+ (oct 2026). Monitoreo IMDEC: 256 muestras en 110 colonias; respuesta de la Secretaría de Salud Jalisco."
+];
+
+/* ============================================================
+   Maquinaria. No hace falta tocar lo de abajo.
+   ============================================================ */
+const $ = id => document.getElementById(id);
+const mx = n => "$"+n.toLocaleString("es-MX",{minimumFractionDigits:2,maximumFractionDigits:2});
+const off = p => Math.round((1-p.precio/p.antes)*100);
+const prod = id => PRODUCTOS.find(p=>p.id===id);
+const corto = p => p.nom.split("—")[0].trim();
+
+document.title = MARCA.nombre + " — " + MARCA.bajada;
+$('razon').textContent = MARCA.razon;
+
+/* ---------- relojes ---------- */
+let queda = 2*3600 + 47*60 + 13;
+const p2 = n => String(n).padStart(2,"0");
+function tic(){
+  queda = queda>0 ? queda-1 : 6*3600;
+  const hh=p2(Math.floor(queda/3600)), mm=p2(Math.floor(queda%3600/60)), ss=p2(queda%60);
+  h.textContent=h2.textContent=hh; m.textContent=m2.textContent=mm; s.textContent=s2.textContent=ss;
+}
+tic(); setInterval(tic,1000);
+
+/* ---------- ofertas relámpago ---------- */
+$('fila').innerHTML = [...PRODUCTOS].sort((a,b)=>b.rel-a.rel).map(p=>`
+  <div class="mini-card" onclick="abrirFicha('${p.id}')">
+    <div class="ph"><img src="${p.img[0]}" alt="" loading="lazy"><span class="desc">-${off(p)}%</span></div>
+    <div class="pr">${mx(p.precio).replace(".00","")}<s>${mx(p.antes).replace(".00","")}</s></div>
+    <div class="vendido"><i style="width:${p.rel}%"></i><span>${p.rel}% vendido</span></div>
+  </div>`).join("");
+
+/* ---------- categorías ---------- */
+const CATS = ["Todo",...new Set(PRODUCTOS.map(p=>p.cat))];
+let catActiva = "Todo";
+const cats = $('cats');
+CATS.forEach(c=>{
+  const b=document.createElement('button');
+  b.textContent=c; b.setAttribute('aria-pressed', c===catActiva);
+  b.onclick=()=>{catActiva=c;$('q').value="";marcarCat();pintar();};
+  cats.appendChild(b);
+});
+const marcarCat = () => [...cats.children].forEach(x=>x.setAttribute('aria-pressed',x.textContent===catActiva));
+
+/* ---------- rejilla ---------- */
+function pintar(){
+  const q = $('q').value.trim().toLowerCase();
+  const lista = PRODUCTOS.filter(p=>
+    (catActiva==="Todo"||p.cat===catActiva) &&
+    (!q || (p.nom+p.claim+p.cat+p.puntos.join(" ")).toLowerCase().includes(q)));
+  $('conteo').textContent = lista.length+" productos";
+  $('rejilla').innerHTML = lista.length ? lista.map(p=>`
+    <article class="card">
+      <div class="foto" onclick="abrirFicha('${p.id}')">
+        <img src="${p.img[0]}" alt="${corto(p)}" loading="lazy">
+        ${p.img[1]?`<img class="alt" src="${p.img[1]}" alt="" loading="lazy">`:""}
+        <span class="desc">-${off(p)}%</span>
+        ${p.kit?`<span class="tag-kit">KIT ×6</span>`:""}${p.nuevo?`<span class="tag-kit">NUEVO</span>`:""}
+        <span class="viendo">🔥 <b data-v>${20+Math.floor(Math.random()*180)}</b><span class="pv"> personas</span> viendo esto</span>
+      </div>
+      <div class="info">
+        <h3 class="nom" onclick="abrirFicha('${p.id}')">${p.nom}</h3>
+        <p class="claim">${p.claim}</p>
+        <div class="estrellas"><b>★★★★★</b> ${p.est.toFixed(1)} · ${p.vend} vendidos</div>
+        <div class="precios"><span class="precio">${mx(p.precio)}</span><span class="antes">${mx(p.antes)}</span></div>
+        <span class="quedan">¡Solo quedan ${p.quedan}!</span>
+        <button class="add" onclick="agregar('${p.id}')">Agregar al carrito</button>
+      </div></article>`).join("")
+    : `<p style="grid-column:1/-1;padding:30px;text-align:center;color:var(--gris)">
+       No encontramos «${q.replace(/[<>&"]/g,"")}».<br>Intenta con "olor", "piel" o "inundación".</p>`;
+}
+function filtrar(){catActiva="Todo";marcarCat();pintar();
+  $('rejilla').scrollIntoView({behavior:'smooth',block:'start'});}
+$('q').addEventListener('input',()=>{catActiva="Todo";marcarCat();pintar();});
+pintar();
+
+setInterval(()=>{
+  document.querySelectorAll('[data-v]').forEach(el=>{
+    el.textContent = Math.max(11, +el.textContent + Math.floor(Math.random()*9)-4);
+  });
+},2600);
+
+/* ---------- ranking de colonias ---------- */
+const maxCol = COLONIAS[0][1];
+$('rank').innerHTML = COLONIAS.map(([c,n],i)=>`
+  <div class="row"><b>${i+1}</b><span>${c}</span>
+  <div class="bar"><i style="width:${n/maxCol*100}%"></i></div><em>${n}</em></div>`).join("");
+
+/* ---------- frases oficiales ---------- */
+const iniciales = s => s.split(" ").filter(w=>w.length>2).slice(0,2).map(w=>w[0]).join("");
+$('frases').innerHTML = FRASES.map(f=>`
+  <div class="frase">
+    <blockquote>${f.q}</blockquote>
+    <div class="quien"><span class="av">${iniciales(f.who)}</span><span><b>${f.who}</b><i>${f.cargo}</i></span></div>
+    <div class="resp"><span>${f.r}</span><button onclick="abrirFicha('${f.p}')">Ver producto</button></div>
+  </div>`).join("");
+
+/* ---------- tabla nutrimental ---------- */
+$('nutri').innerHTML = `
+  <h3>Información nutrimental</h3>
+  <div class="porcion">Porción: <b>${NUTRI.porcion}</b><br>Porciones por recibo del SIAPA: <b>ilimitadas</b></div>
+  <div class="cab"><span>Contenido</span><span>Detectado en</span></div>
+  ${NUTRI.filas.map(([n,v,nivel,nota])=>`
+    <div class="r${nivel===2?" sub":""}${nivel===3?" fuerte":""}">
+      <span>${nivel===2?n:`<b>${n}</b>`}${nota?` <small style="color:var(--gris)">(${nota})</small>`:""}</span><span>${v}</span>
+    </div>`).join("")}
+  <p class="pie">${NUTRI.pie}</p>`;
+$('efectos').innerHTML = EFECTOS.map(e=>`
+  <div class="efecto${e.promo?" promo":""}"><b>${e.t}</b><span>${e.d}</span>
+  <div style="margin-top:7px"><button class="btn" style="padding:5px 12px;font-size:11.5px" onclick="abrirFicha('${e.p}')">Solución: ${corto(prod(e.p))}</button></div></div>`).join("");
+
+/* ---------- denuncias ---------- */
+$('denuncias').innerHTML = tarjetasDenuncia();
+$('tipden').textContent = TIP_DENUNCIA;
+
+/* ---------- reseñas ---------- */
+$('rejr').innerHTML = RESENAS.map(r=>`
+  <div class="res">
+    <div class="top">
+      <span class="quien"><span class="av">${r.n[0]}</span><span>${r.n}<i>${r.col}</i></span></span>
+      <b style="color:var(--verde);letter-spacing:-1px">★★★★★</b>
+    </div><p>${r.t}</p>
+    <div class="compro">✓ Compra verificada · ${corto(prod(r.p))}</div></div>`).join("");
+
+/* ---------- ficha de producto ---------- */
+function abrirFicha(id){
+  const p = prod(id);
+  $('ficha').innerHTML = `
+    <button class="x" onclick="cerrarFicha()" aria-label="Cerrar">×</button>
+    <div class="galeria">
+      <div class="grande"><img id="fgrande" src="${p.img[0]}" alt="${corto(p)}"></div>
+      <div class="tn">${p.img.map((src,i)=>`<button aria-current="${i===0}" onclick="verFoto(this,'${src}')"><img src="${src}" alt=""></button>`).join("")}</div>
+    </div>
+    <div class="fdatos">
+      <div class="estrellas"><b>★★★★★</b> ${p.est.toFixed(1)} · ${p.vend} vendidos · Vendedor ⭐ 5 estrellas</div>
+      <h3>${p.nom}</h3>
+      <div class="precios"><span class="precio">${mx(p.precio)}</span><span class="antes">${mx(p.antes)}</span><span class="ahorro">-${off(p)}%</span></div>
+      <span class="quedan">⏳ ¡Solo quedan ${p.quedan}! · ${20+Math.floor(Math.random()*60)} personas lo tienen en su carrito</span>
+      <ul>${p.puntos.map(t=>`<li>${t}</li>`).join("")}</ul>
+      <table class="specs">${p.specs.map(([a,b])=>`<tr><td>${a}</td><td>${b}</td></tr>`).join("")}</table>
+      <div class="fbtns">
+        <button class="btn sec" onclick="agregar('${p.id}');cerrarFicha()">Agregar al carrito</button>
+        <button class="btn" onclick="comprarYa('${p.id}')">Comprar ahora</button>
+      </div>
+    </div>`;
+  $('dlgficha').classList.add('open');
+}
+function verFoto(btn,src){
+  $('fgrande').src=src;
+  btn.parentNode.querySelectorAll('button').forEach(b=>b.setAttribute('aria-current',b===btn));
+}
+const cerrarFicha = () => $('dlgficha').classList.remove('open');
+
+/* ---------- cupón de bienvenida ---------- */
+let cupon = false;
+setTimeout(()=>{ if(!document.querySelector('.dlg.open,#cajon.open,#modal.open')) $('dlgcupon').classList.add('open'); },3500);
+const cerrarCupon = () => $('dlgcupon').classList.remove('open');
+function aceptarCupon(){ cupon=true; cerrarCupon(); actualizar();
+  $('rejilla').scrollIntoView({behavior:'smooth',block:'start'}); }
+
+/* ---------- carrito ---------- */
+let carro = [];
+const UMBRAL = 299, ENVIO = 89, DESC = 100;
+function agregar(id){
+  carro.push(prod(id));
+  actualizar(); abrirCarrito();
+  const b=$('btncar'); b.classList.remove('pop'); void b.offsetWidth; b.classList.add('pop');
+}
+function comprarYa(id){ agregar(id); cerrarFicha(); }
+function quitar(i){carro.splice(i,1);actualizar();}
+function actualizar(){
+  const sub = carro.reduce((a,p)=>a+p.precio,0);
+  const envio = sub>=UMBRAL || !sub ? 0 : ENVIO;
+  const desc = cupon && sub ? Math.min(DESC,sub) : 0;
+  $('ncar').textContent = carro.length;
+  $('msub').textContent = mx(sub);
+  $('menvio').textContent = envio ? mx(envio) : "GRATIS";
+  $('lcupon').hidden = !desc;
+  $('mtotal').textContent = mx(sub+envio-desc);
+  $('items').innerHTML = carro.length
+    ? carro.map((p,i)=>`<div class="item">
+        <div class="mini"><img src="${p.img[0]}" alt=""></div>
+        <div class="t">${corto(p)}</div>
+        <div class="p">${mx(p.precio)}</div>
+        <button class="quitar" onclick="quitar(${i})" aria-label="Quitar">×</button></div>`).join("")
+    : `<p style="padding:30px 10px;text-align:center;color:var(--gris)">Tu carrito está vacío.<br>Tu tinaco, lleno de sedimento.</p>`;
+  $('barra').style.width = Math.min(100, sub/UMBRAL*100)+"%";
+  $('envio-txt').textContent = sub>=UMBRAL
+    ? "¡Felicidades! Tu envío es GRATIS 🚚"
+    : `Te faltan ${mx(UMBRAL-sub)} para ENVÍO GRATIS 🚚`;
+}
+const abrirCarrito=()=>{$('cajon').classList.add('open');$('velo').classList.add('open')};
+const cerrarCarrito=()=>{$('cajon').classList.remove('open');$('velo').classList.remove('open')};
+actualizar();
+
+/* ---------- notificaciones de compra ---------- */
+function toast(){
+  const p = PRODUCTOS[Math.floor(Math.random()*PRODUCTOS.length)];
+  const n = NOMBRES[Math.floor(Math.random()*NOMBRES.length)];
+  const c = COLONIAS[Math.floor(Math.random()*COLONIAS.length)][0];
+  const t = $('toast');
+  t.innerHTML = `<img src="${p.img[0]}" alt=""><div><b>${n}</b> de ${c} compró<br>${corto(p)}<i>hace ${1+Math.floor(Math.random()*9)} min</i></div>`;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),4200);
+}
+setTimeout(()=>{toast();setInterval(toast,11000);},7000);
+
+/* ---------- la grieta ---------- */
+function pagar(){
+  if(!carro.length){abrirCarrito();return;}
+  if(!REVELAR){
+    alert("El sistema de pagos no está disponible en este momento. Intenta más tarde.");
+    return;
+  }
+  cerrarCarrito();
+  const ids = [...new Set(carro.map(p=>p.id))];
+  $('mt').textContent = "Esta tienda es inventada.";
+  $('mc').innerHTML = `
+    <p>${MARCA.nombre} y sus productos son ficción. Lo que cada producto de tu carrito tapa está documentado:</p>
+    <ul>${ids.map(prod).map(p=>`<li><b>${corto(p)}</b>${p.dato}</li>`).join("")}</ul>
+    <p>El ranking de «lo más pedido por colonia» muestra reportes ciudadanos de agua turbia, maloliente o con sedimentos. La «tabla nutrimental» enlista los contaminantes que el monitoreo ciudadano encontró en la llave, mientras la Secretaría de Salud decía no encontrar metales pesados.</p>
+    ${ids.includes("manifestante") ? "" : `<p><b style="color:#fff">El 11 de octubre</b> miles de personas marcharon a Casa Jalisco a pedir agua limpia. Es la única vez que el agua les llegó con presión: desde un camión de Bomberos, junto con gas lacrimógeno y petardos aturdidores. Hubo 39 detenidos. Un día antes, el gobernador había girado instrucciones para que la marcha fuera «ordenada y segura».</p>`}
+    <p>Las frases oficiales de la tienda son reales. Prometen un servicio público sin aumento de tarifas; mientras tanto llega «menos agua, de mejor calidad» y cada familia paga su propia solución: garrafones, filtros, jabón. Es una privatización que se cobra casa por casa.</p>
+    <div class="cifras">
+      <div><b>84%</b><span>de los reportes describe agua con mal olor, turbia o con sedimentos</span></div>
+      <div><b>0.77%</b><span>de quienes reportaron al SIAPA obtuvo solución (6 de 784)</span></div>
+      <div><b>51.9%</b><span>de los hogares asocia problemas de salud con el agua</span></div>
+      <div><b>73.2%</b><span>arrastra el problema desde hace meses o más de un año</span></div>
+    </div>
+    <p>Cada producto de esta tienda convierte un derecho en una compra individual: si el agua llega mal, te vendemos una forma de soportarla. Las fallas de tratamiento, distribución y mantenimiento son técnicamente resolubles. Que sigan ahí es una decisión.</p>
+    <p><b style="color:#fff">El agua limpia se exige. Aquí puedes hacerlo:</b></p>
+    <div class="denuncias oscuro">${tarjetasDenuncia()}</div>
+    <p style="font-size:12.5px">${TIP_DENUNCIA}</p>
+    <details><summary>Fuentes</summary><ol>${FUENTES.map(f=>`<li>${f}</li>`).join("")}</ol></details>
+    <div class="acciones">
+      <a class="btn" href="https://www.siapa.gob.mx/quejas-y-sugerencias" target="_blank" rel="noopener">Reportar al SIAPA</a>
+      <button class="btn blanco" onclick="$('modal').classList.remove('open')">Volver a la tienda</button>
+    </div>
+    <p style="font-size:12px;opacity:.7;margin:16px 0 0">Proyecto colectivo sobre agua, territorio y ciberespacio · Zona Metropolitana de Guadalajara · 2026.</p>`;
+  $('modal').classList.add('open');
+  $('modal').scrollTop = 0;
+}
+
+document.addEventListener('keydown',e=>{
+  if(e.key!=="Escape") return;
+  cerrarFicha(); cerrarCupon(); cerrarCarrito(); $('modal').classList.remove('open');
+});
+</script>
+</body>
+</html>
