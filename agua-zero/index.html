@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AGUA ZERO — Soluciones para el agua que te tocó</title>
 <link rel="icon" href="img/logo.png">
+<script data-goatcounter="https://multimediacaav.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700;6..12,800;6..12,900&display=swap" rel="stylesheet">
@@ -993,9 +994,21 @@ $('rejr').innerHTML = RESENAS.map(r=>`
     </div><p>${r.t}</p>
     <div class="compro">✓ Compra verificada · ${corto(prod(r.p))}</div></div>`).join("");
 
+/* ---------- estadísticas (GoatCounter, se ven en /visitas) ----------
+   "embudo-*" cuenta personas únicas por etapa; el resto es el detalle. */
+const contar = (path, title) => { try { window.goatcounter?.count?.({path, title:title||path, event:true}); } catch(e){} };
+document.addEventListener('click', e => {
+  const a = e.target.closest('.den a, .acciones a'); if(!a) return;
+  const org = a.closest('.den')?.querySelector('.org').textContent || "SIAPA";
+  contar('embudo-denuncia', 'Fue a denunciar');
+  const tel = a.href.startsWith('tel:');
+  contar(`denuncia-${org.toLowerCase()}${tel?'-llamada':''}`, `Denuncia: ${org}${tel?' (llamada)':''}`);
+});
+
 /* ---------- ficha de producto ---------- */
 function abrirFicha(id){
   const p = prod(id);
+  contar('embudo-ficha', 'Abrió una ficha'); contar(`ficha-${id}`, `Ficha: ${corto(p)}`);
   $('ficha').innerHTML = `
     <button class="x" onclick="cerrarFicha()" aria-label="Cerrar">×</button>
     <div class="galeria">
@@ -1026,7 +1039,7 @@ const cerrarFicha = () => $('dlgficha').classList.remove('open');
 let cupon = false;
 setTimeout(()=>{ if(!document.querySelector('.dlg.open,#cajon.open,#modal.open')) $('dlgcupon').classList.add('open'); },3500);
 const cerrarCupon = () => $('dlgcupon').classList.remove('open');
-function aceptarCupon(){ cupon=true; cerrarCupon(); actualizar();
+function aceptarCupon(){ cupon=true; cerrarCupon(); actualizar(); contar('cupon-aceptado', 'Aceptó el cupón');
   $('rejilla').scrollIntoView({behavior:'smooth',block:'start'}); }
 
 /* ---------- carrito ---------- */
@@ -1034,6 +1047,7 @@ let carro = [];
 const UMBRAL = 299, ENVIO = 89, DESC = 100;
 function agregar(id){
   carro.push(prod(id));
+  contar('embudo-carrito', 'Agregó al carrito'); contar(`carrito-${id}`, `Carrito: ${corto(prod(id))}`);
   actualizar(); abrirCarrito();
   const b=$('btncar'); b.classList.remove('pop'); void b.offsetWidth; b.classList.add('pop');
 }
@@ -1084,6 +1098,7 @@ function pagar(){
     return;
   }
   cerrarCarrito();
+  contar('embudo-revelacion', 'Vio la revelación');
   const ids = [...new Set(carro.map(p=>p.id))];
   $('mt').textContent = "Esta tienda es inventada.";
   $('mc').innerHTML = `
