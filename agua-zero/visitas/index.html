@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Visitas AGUA ZERO</title>
+<link rel="icon" href="../img/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700;6..12,800&display=swap" rel="stylesheet">
+<!--
+  Panel interno de visitas de aguazero.lol (solo para el equipo).
+  Lee la API de GoatCounter (multimediacaav.goatcounter.com) con un
+  token de SOLO LECTURA que cada quien pega una vez; el token se guarda
+  en su navegador y nunca va en el repositorio.
+  Esta página no se cuenta a sí misma y pide no ser indexada.
+-->
+<style>
+:root{
+  --fondo:#F2F5F6; --tarjeta:#fff; --tinta:#10292A; --gris:#5E6B6C; --tenue:#8A9798; --linea:#E3E9EA;
+  --zero:#0B5E62; --verde:#1DAA3C;
+  --serie:#1F78AE; --pista:#E7EEF7;
+  --display:"Bebas Neue",Impact,"Arial Narrow",sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --fondo:#0B1A1B; --tarjeta:#122A2C; --tinta:#E4F0F0; --gris:#A9C3C4; --tenue:#7E9A9B; --linea:#23413F;
+    --zero:#6FC3C7; --serie:#3F95CF; --pista:#1B3A3D;
+  }
+}
+:root[data-theme="dark"]{
+  --fondo:#0B1A1B; --tarjeta:#122A2C; --tinta:#E4F0F0; --gris:#A9C3C4; --tenue:#7E9A9B; --linea:#23413F;
+  --zero:#6FC3C7; --serie:#3F95CF; --pista:#1B3A3D;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+body{font-family:"Nunito Sans",system-ui,sans-serif;background:var(--fondo);color:var(--tinta);font-size:14px;line-height:1.45}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+a{color:var(--zero)}
+
+header{background:var(--tarjeta);border-bottom:1px solid var(--linea);position:sticky;top:0;z-index:10}
+.hw{max-width:1100px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.marca{display:flex;align-items:center;gap:9px;margin-right:auto}
+.marca img{width:36px;height:36px}
+.marca h1{font-family:var(--display);font-weight:400;font-size:26px;line-height:1;color:var(--zero);letter-spacing:.5px}
+.marca small{display:block;font-size:11px;color:var(--gris);font-weight:700}
+.periodos{display:flex;gap:4px;background:var(--fondo);border-radius:999px;padding:3px}
+.periodos button{padding:6px 12px;border-radius:999px;font-weight:800;font-size:12.5px;color:var(--gris)}
+.periodos button[aria-pressed="true"]{background:var(--zero);color:var(--tarjeta)}
+.acc{display:flex;gap:6px}
+.acc button{padding:6px 10px;border-radius:8px;font-size:12.5px;font-weight:700;color:var(--gris);border:1px solid var(--linea)}
+.acc button:hover{color:var(--tinta)}
+
+main{max-width:1100px;margin:0 auto;padding:16px}
+.estado{font-size:12px;color:var(--gris);margin-bottom:12px;min-height:18px}
+.estado.error{color:#C0392B;font-weight:700}
+
+.tarjeta{background:var(--tarjeta);border-radius:14px;padding:16px 18px;border:1px solid var(--linea)}
+.tarjeta h2{font-size:15px;font-weight:800;margin-bottom:2px}
+.tarjeta .sub{font-size:12px;color:var(--gris);margin-bottom:12px}
+
+/* cifras */
+.cifras{display:grid;grid-template-columns:1.3fr repeat(3,1fr);gap:12px;margin-bottom:12px}
+.tile .lab{font-size:12.5px;color:var(--gris);font-weight:700}
+.tile .val{font-size:34px;font-weight:800;line-height:1.1;margin-top:4px}
+.tile .nota{font-size:12px;color:var(--gris);margin-top:2px}
+.tile.hero .val{font-size:56px}
+
+/* columnas */
+#serie{position:relative}
+#serie svg{display:block;width:100%;height:240px;overflow:visible}
+.eje text{font-size:11px;fill:var(--tenue);font-variant-numeric:tabular-nums}
+.eje line{stroke:var(--linea);stroke-width:1}
+.col{fill:var(--serie)}
+.hit{fill:transparent}
+.hit:hover + .col,.col.on{opacity:.8}
+.pico{font-size:11.5px;font-weight:800;fill:var(--tinta)}
+
+/* barras */
+.rejilla{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;margin-top:12px}
+.barras{display:grid;gap:9px}
+.barra{display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:center;cursor:default}
+.barra .n{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.barra .v{font-size:13px;font-weight:800;font-variant-numeric:tabular-nums;text-align:right}
+.barra .v i{font-style:normal;font-weight:600;color:var(--gris);font-size:11.5px;margin-left:4px}
+.barra .pista{grid-column:1/-1;height:10px;background:var(--pista);border-radius:0 4px 4px 0}
+.barra .pista b{display:block;height:100%;background:var(--serie);border-radius:0 4px 4px 0;min-width:2px}
+.barra:hover .pista b{opacity:.8}
+.vacio{font-size:12.5px;color:var(--tenue);padding:6px 0}
+.embudo .barra .pista{height:14px}
+
+details{margin-top:12px;font-size:12.5px}
+summary{cursor:pointer;color:var(--gris);font-weight:700}
+table{border-collapse:collapse;margin-top:8px;width:100%;max-width:360px;font-variant-numeric:tabular-nums}
+td,th{padding:4px 8px;border-bottom:1px solid var(--linea);text-align:left}
+td:last-child,th:last-child{text-align:right}
+
+#tip{position:fixed;pointer-events:none;background:var(--tinta);color:var(--tarjeta);font-size:12px;padding:6px 9px;border-radius:7px;z-index:50;opacity:0;transition:opacity .1s;white-space:nowrap}
+#tip b{font-weight:800}
+
+/* acceso */
+#acceso{max-width:520px;margin:40px auto}
+#acceso h2{font-family:var(--display);font-weight:400;font-size:34px;color:var(--zero);line-height:1;margin-bottom:8px}
+#acceso ol{margin:10px 0 14px 18px;display:grid;gap:4px;font-size:13px;color:var(--gris)}
+#acceso form{display:flex;gap:8px;flex-wrap:wrap}
+#acceso input{flex:1 1 220px;padding:10px 12px;border-radius:10px;border:1.5px solid var(--linea);background:var(--fondo);font-size:16px}
+#acceso button{background:var(--zero);color:var(--tarjeta);font-weight:800;padding:10px 18px;border-radius:10px}
+#acceso p{font-size:12px;color:var(--gris);margin-top:10px}
+
+footer{max-width:1100px;margin:0 auto;padding:6px 16px 30px;font-size:11.5px;color:var(--tenue)}
+
+@media(max-width:760px){
+  .cifras{grid-template-columns:repeat(3,1fr);gap:8px}
+  .tile.hero{grid-column:1/-1}
+  .tile{padding:12px}
+  .tile .lab,.tile .nota{font-size:11.5px}
+  .tile .val{font-size:26px}
+  .tile.hero .val{font-size:48px}
+  .rejilla{grid-template-columns:1fr}
+  main{padding:12px}
+  .marca{margin-right:0;flex:1 1 100%}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="hw">
+    <div class="marca"><img src="../img/logo.png" alt=""><div><h1>Visitas</h1><small>aguazero.lol · panel del equipo</small></div></div>
+    <div class="periodos" id="periodos" role="group" aria-label="Periodo">
+      <button data-p="hoy">Hoy</button><button data-p="7">7 días</button><button data-p="30" aria-pressed="true">30 días</button><button data-p="todo">Todo</button>
+    </div>
+    <div class="acc" id="acc" hidden><button onclick="cargar()">Actualizar</button><button onclick="salir()">Salir</button></div>
+  </div>
+</header>
+
+<main>
+  <section id="acceso" class="tarjeta" hidden>
+    <h2>Acceso del equipo</h2>
+    <p style="font-size:13px;margin:0;color:var(--tinta)">Este panel lee las estadísticas de GoatCounter. Pega un token de <b>solo lectura</b>; se guarda en este navegador.</p>
+    <ol>
+      <li>Entra a <a href="https://multimediacaav.goatcounter.com" target="_blank" rel="noopener">multimediacaav.goatcounter.com</a>.</li>
+      <li>Ve a <b>Settings → API</b> (o tu usuario → <b>API</b>) y crea un token nuevo.</li>
+      <li>Marca solo el permiso <b>Read statistics</b> y copia el token.</li>
+    </ol>
+    <p class="estado error" id="avisoToken" hidden style="margin:0 0 8px">Ese token no funcionó: revisa que tenga el permiso «Read statistics».</p>
+    <form onsubmit="event.preventDefault();entrar(this.t.value)">
+      <input name="t" type="password" autocomplete="off" placeholder="Token de GoatCounter" required>
+      <button>Entrar</button>
+    </form>
+    <p>Para compartir con el equipo puedes mandar el enlace <code>aguazero.lol/visitas/#token=TU_TOKEN</code>: la parte después de <code>#</code> no viaja al servidor y la página la borra de la barra al leerla.</p>
+  </section>
+
+  <div id="panel" hidden>
+    <p class="estado" id="estado" aria-live="polite"></p>
+
+    <div class="cifras">
+      <div class="tarjeta tile hero"><div class="lab">Visitantes</div><div class="val" id="kVis">–</div><div class="nota" id="kVisN"></div></div>
+      <div class="tarjeta tile"><div class="lab">Vieron la revelación</div><div class="val" id="kRev">–</div><div class="nota" id="kRevN"></div></div>
+      <div class="tarjeta tile"><div class="lab">Fueron a denunciar</div><div class="val" id="kDen">–</div><div class="nota" id="kDenN"></div></div>
+      <div class="tarjeta tile"><div class="lab">Aceptaron el cupón</div><div class="val" id="kCup">–</div><div class="nota" id="kCupN"></div></div>
+    </div>
+
+    <div class="tarjeta">
+      <h2 id="serieT">Visitantes por día</h2>
+      <div class="sub" id="serieS"></div>
+      <div id="serie"></div>
+      <details><summary>Ver tabla</summary><table id="serieTabla"></table></details>
+    </div>
+
+    <div class="rejilla">
+      <div class="tarjeta embudo"><h2>Embudo: de la tienda a la denuncia</h2><div class="sub">Personas únicas por etapa · % sobre visitantes</div><div class="barras" id="bEmbudo"></div></div>
+      <div class="tarjeta"><h2>Productos más vistos</h2><div class="sub">Fichas abiertas</div><div class="barras" id="bFichas"></div></div>
+      <div class="tarjeta"><h2>Productos al carrito</h2><div class="sub">Veces que se agregó cada uno</div><div class="barras" id="bCarrito"></div></div>
+      <div class="tarjeta"><h2>Denuncias por dependencia</h2><div class="sub">Clics en «Ir al sitio» y «Llamar»</div><div class="barras" id="bDen"></div></div>
+      <div class="tarjeta"><h2>De dónde llegan</h2><div class="sub">Sitio o app que mandó la visita</div><div class="barras" id="bRefs"></div></div>
+      <div class="tarjeta"><h2>Ubicación</h2><div class="sub">País o región</div><div class="barras" id="bLoc"></div></div>
+      <div class="tarjeta"><h2>Dispositivo</h2><div class="sub">Por tamaño de pantalla</div><div class="barras" id="bSize"></div></div>
+      <div class="tarjeta"><h2>Navegador</h2><div class="sub">&nbsp;</div><div class="barras" id="bNav"></div></div>
+      <div class="tarjeta"><h2>Sistema operativo</h2><div class="sub">&nbsp;</div><div class="barras" id="bSis"></div></div>
+    </div>
+  </div>
+</main>
+<footer>Datos de GoatCounter: sin cookies y sin datos personales. Cada número cuenta personas únicas por sesión, no clics repetidos.</footer>
+<div id="tip" role="tooltip"></div>
+
+<script>
+const SITIO = "https://multimediacaav.goatcounter.com";
+const INICIO = "2026-10-20";            // primer día con datos posibles
+const CLAVE = "aguazero-gc-token";
+
+const $ = id => document.getElementById(id);
+const fmt = n => n.toLocaleString("es-MX");
+const pct = (a,b) => b ? (a/b*100).toFixed(a/b<.1?1:0)+"%" : "–";
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const MESES = ["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
+const diaCorto = d => { const [y,m,dd] = d.split("-"); return `${+dd} ${MESES[m-1]}`; };
+
+/* ---------- token ---------- */
+const leer = () => { try { return localStorage.getItem(CLAVE) || ""; } catch(e){ return ""; } };
+let token = leer();
+const m = location.hash.match(/token=([^&]+)/);
+if(m){ token = decodeURIComponent(m[1]); try{ localStorage.setItem(CLAVE, token); }catch(e){} history.replaceState(null, "", location.pathname); }
+function entrar(t){ token = t.trim(); $('avisoToken').hidden = true; try{ localStorage.setItem(CLAVE, token); }catch(e){} iniciar(); }
+function salir(){ try{ localStorage.removeItem(CLAVE); }catch(e){} token = ""; iniciar(); }
+
+/* ---------- periodo ---------- */
+let periodo = "30";
+$('periodos').addEventListener('click', e => {
+  const b = e.target.closest('button'); if(!b) return;
+  periodo = b.dataset.p;
+  [...$('periodos').children].forEach(x => x.setAttribute('aria-pressed', x === b));
+  cargar();
+});
+function rango(){
+  const hoy0 = new Date(); hoy0.setHours(0,0,0,0);
+  let ini = new Date(hoy0);
+  if(periodo === "7") ini.setDate(ini.getDate()-6);
+  if(periodo === "30") ini.setDate(ini.getDate()-29);
+  if(periodo === "todo") ini = new Date(INICIO+"T00:00:00");
+  const fin = new Date(); fin.setMinutes(0,0,0); fin.setHours(fin.getHours()+1);
+  return {ini, fin};
+}
+
+/* ---------- API (máx. 4 peticiones por segundo) ---------- */
+const pausa = ms => new Promise(r => setTimeout(r, ms));
+async function api(ruta, extra = {}){
+  const {ini, fin} = rango();
+  const u = new URL(SITIO + "/api/v0" + ruta);
+  u.searchParams.set("start", ini.toISOString().slice(0,19)+"Z");
+  u.searchParams.set("end", fin.toISOString().slice(0,19)+"Z");
+  for(const [k,v] of Object.entries(extra)) u.searchParams.set(k, v);
+  for(let intento = 0; intento < 3; intento++){
+    const r = await fetch(u, {headers:{Authorization:"Bearer "+token, "Content-Type":"application/json"}});
+    if(r.status === 429){ await pausa(1200); continue; }
+    if(r.status === 401 || r.status === 403) throw new Error("token");
+    if(!r.ok) throw new Error(`GoatCounter respondió ${r.status} en ${ruta}`);
+    await pausa(280);
+    return r.json();
+  }
+  throw new Error("Demasiadas peticiones; intenta en un minuto.");
+}
+
+/* ---------- tooltip compartido ---------- */
+const tip = $('tip');
+function mostrarTip(e, html){
+  tip.innerHTML = html; tip.style.opacity = 1;
+  const w = tip.offsetWidth, x = Math.min(e.clientX + 12, innerWidth - w - 8);
+  tip.style.left = Math.max(8, x) + "px"; tip.style.top = (e.clientY - 38) + "px";
+}
+const ocultarTip = () => tip.style.opacity = 0;
+
+/* ---------- barras horizontales ---------- */
+function barras(id, filas, total, conPct){
+  const el = $(id);
+  if(!filas.length){ el.innerHTML = `<div class="vacio">Sin datos en este periodo.</div>`; return; }
+  const max = Math.max(...filas.map(f => f.v), 1);
+  el.innerHTML = filas.map(f => `
+    <div class="barra" data-t="${esc(f.n)}" data-v="${f.v}">
+      <span class="n">${esc(f.n)}</span>
+      <span class="v">${fmt(f.v)}${conPct ? `<i>${pct(f.v,total)}</i>` : ""}</span>
+      <span class="pista"><b style="width:${f.v/max*100}%"></b></span>
+    </div>`).join("");
+  el.querySelectorAll('.barra').forEach(b => {
+    b.onmousemove = e => mostrarTip(e, `${b.dataset.t} · <b>${fmt(+b.dataset.v)}</b>${total ? " · " + pct(+b.dataset.v, total) : ""}`);
+    b.onmouseleave = ocultarTip;
+  });
+}
+
+/* ---------- columnas por día / hora ---------- */
+let ultimaSerie = [];
+function columnas(puntos){
+  ultimaSerie = puntos;
+  const caja = $('serie'), W = caja.clientWidth || 600, H = 240, iz = 34, ab = 22, ar = 16;
+  if(!puntos.length || puntos.every(p => !p.v)){ caja.innerHTML = `<div class="vacio" style="padding:30px 0">Sin visitas en este periodo todavía.</div>`; return; }
+  const max = Math.max(...puntos.map(p => p.v));
+  const paso = max <= 4 ? 1 : Math.pow(10, Math.floor(Math.log10(max/4)));
+  const tope = Math.ceil(max / (paso*4)) * paso * 4 || 4;
+  const y = v => H - ab - v / tope * (H - ab - ar);
+  const ranura = (W - iz) / puntos.length, ancho = Math.max(2, Math.min(24, ranura * .7));
+  const compacto = n => n >= 1000 ? (n/1000).toFixed(n%1000 ? 1 : 0) + "K" : n;
+  let s = `<g class="eje">`;
+  for(let i = 0; i <= 4; i++){ const v = tope/4*i; s += `<line x1="${iz}" x2="${W}" y1="${y(v)}" y2="${y(v)}"/><text x="${iz-6}" y="${y(v)+4}" text-anchor="end">${compacto(v)}</text>`; }
+  const cada = Math.ceil(puntos.length / Math.max(2, Math.floor((W - iz) / 54)));
+  puntos.forEach((p,i) => { if(i % cada === 0 || i === puntos.length-1 && puntos.length < 10) s += `<text x="${iz + ranura*i + ranura/2}" y="${H-5}" text-anchor="middle">${p.x}</text>`; });
+  s += `</g>`;
+  const iPico = puntos.reduce((a,p,i) => p.v > puntos[a].v ? i : a, 0);
+  puntos.forEach((p,i) => {
+    const cx = iz + ranura*i + ranura/2, x = cx - ancho/2, top = y(p.v), base = y(0), r = Math.min(4, ancho/2, base-top);
+    s += `<rect class="hit" x="${iz + ranura*i}" y="${ar}" width="${ranura}" height="${H-ab-ar}" data-i="${i}"/>`;
+    if(p.v) s += `<path class="col" d="M${x},${base} V${top+r} Q${x},${top} ${x+r},${top} H${x+ancho-r} Q${x+ancho},${top} ${x+ancho},${top+r} V${base} Z"/>`;
+    else s += `<path class="col"/>`;
+    if(i === iPico) s += `<text class="pico" x="${cx}" y="${top-6}" text-anchor="middle">${fmt(p.v)}</text>`;
+  });
+  caja.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Visitantes por periodo">${s}</svg>`;
+  caja.querySelectorAll('.hit').forEach(h => {
+    const p = puntos[h.dataset.i];
+    h.onmousemove = e => mostrarTip(e, `${p.etiqueta} · <b>${fmt(p.v)}</b> visitantes`);
+    h.onmouseleave = ocultarTip;
+  });
+  $('serieTabla').innerHTML = `<tr><th>${periodo === "hoy" ? "Hora" : "Día"}</th><th>Visitantes</th></tr>` +
+    puntos.map(p => `<tr><td>${p.etiqueta}</td><td>${fmt(p.v)}</td></tr>`).join("");
+}
+addEventListener('resize', () => { if(ultimaSerie.length) columnas(ultimaSerie); });
+
+/* ---------- traducciones ---------- */
+const TAM = {"Phones":"Celular","Larger phones":"Celular grande","Tablets and small laptops":"Tablet o laptop chica",
+  "Computer monitors":"Computadora","Computer monitors larger than HD":"Monitor grande","(unknown)":"Sin dato"};
+const ref = n => ({"(no data)":"Directo / sin dato","":"Directo / sin dato"}[n] ?? n);
+const sinPref = (t, pref) => t.replace(pref, "");
+
+/* ---------- carga ---------- */
+let cargando = false;
+async function cargar(){
+  if(cargando || !token) return;
+  cargando = true;
+  const est = $('estado'); est.className = "estado"; est.textContent = "Cargando…";
+  try{
+    const hits = (await api("/stats/hits", {limit:100})).hits || [];
+    const limpio = h => h.path.replace(/^\//, "");
+    const paginas = hits.filter(h => !h.event);
+    const ev = {}; hits.filter(h => h.event).forEach(h => ev[limpio(h)] = h);
+    const n = k => ev[k]?.count || 0;
+    const vis = paginas.reduce((a,h) => a + h.count, 0);
+
+    $('kVis').textContent = fmt(vis);
+    $('kVisN').textContent = paginas.length > 1 ? `${paginas.length} páginas` : "en la tienda";
+    $('kRev').textContent = fmt(n("embudo-revelacion")); $('kRevN').textContent = pct(n("embudo-revelacion"), vis) + " de visitantes";
+    $('kDen').textContent = fmt(n("embudo-denuncia"));   $('kDenN').textContent = pct(n("embudo-denuncia"), vis) + " de visitantes";
+    $('kCup').textContent = fmt(n("cupon-aceptado"));    $('kCupN').textContent = pct(n("cupon-aceptado"), vis) + " de visitantes";
+
+    // serie: suma de las páginas (sin eventos), por día o por hora
+    const porDia = {};
+    paginas.forEach(h => (h.stats || []).forEach(s => {
+      const d = porDia[s.day] ||= {daily:0, hourly:Array(24).fill(0)};
+      d.daily += s.daily || 0; (s.hourly || []).forEach((v,i) => d.hourly[i] += v);
+    }));
+    let puntos;
+    if(periodo === "hoy"){
+      const hoy = Object.keys(porDia).sort().pop();
+      const hr = porDia[hoy]?.hourly || Array(24).fill(0), ahora = new Date().getHours();
+      puntos = hr.slice(0, ahora+1).map((v,i) => ({x:`${i}h`, etiqueta:`${i}:00–${i}:59`, v}));
+      $('serieT').textContent = "Visitantes por hora"; $('serieS').textContent = "Hoy";
+    } else {
+      const {ini} = rango(), dias = [];
+      for(const d = new Date(ini); d <= new Date(); d.setDate(d.getDate()+1))
+        dias.push(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`);
+      puntos = dias.map(d => ({x:diaCorto(d), etiqueta:diaCorto(d), v:porDia[d]?.daily || 0}));
+      $('serieT').textContent = "Visitantes por día"; $('serieS').textContent = `${diaCorto(dias[0])} – ${diaCorto(dias[dias.length-1])}`;
+    }
+    columnas(puntos);
+
+    barras('bEmbudo', [
+      {n:"Visitantes", v:vis},
+      {n:"Abrió una ficha", v:n("embudo-ficha")},
+      {n:"Agregó al carrito", v:n("embudo-carrito")},
+      {n:"Vio la revelación", v:n("embudo-revelacion")},
+      {n:"Fue a denunciar", v:n("embudo-denuncia")}
+    ], vis, true);
+    const grupo = (pref, quitar) => Object.entries(ev).filter(([k]) => k.startsWith(pref))
+      .map(([k,h]) => ({n:sinPref(h.title || k, quitar), v:h.count})).sort((a,b) => b.v - a.v);
+    barras('bFichas', grupo("ficha-", "Ficha: "), 0);
+    barras('bCarrito', grupo("carrito-", "Carrito: "), 0);
+    barras('bDen', grupo("denuncia-", "Denuncia: "), 0);
+
+    const lista = async (pag, id, traducir = x => x) => {
+      const r = await api("/stats/" + pag, {limit:8});
+      const filas = (r.stats || []).map(s => ({n:traducir(s.name), v:s.count}));
+      barras(id, filas, filas.reduce((a,f) => a + f.v, 0), true);
+    };
+    await lista("toprefs", "bRefs", ref);
+    await lista("locations", "bLoc", x => x || "Sin dato");
+    await lista("sizes", "bSize", x => TAM[x] ?? x);
+    await lista("browsers", "bNav", x => x || "Sin dato");
+    await lista("systems", "bSis", x => x || "Sin dato");
+
+    est.textContent = `Actualizado ${new Date().toLocaleTimeString("es-MX", {hour:"2-digit", minute:"2-digit"})}`;
+  } catch(err){
+    if(err.message === "token"){ salir(); $('avisoToken').hidden = false; }
+    else { est.className = "estado error"; est.textContent = "No se pudieron leer los datos: " + err.message; }
+  } finally { cargando = false; }
+}
+
+function iniciar(){
+  $('acceso').hidden = !!token; $('panel').hidden = !token; $('acc').hidden = !token; $('periodos').hidden = !token;
+  if(token) cargar();
+}
+iniciar();
+</script>
+</body>
+</html>
