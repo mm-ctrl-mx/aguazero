@@ -249,6 +249,8 @@ main{max-width:1200px;margin:0 auto;padding:14px}
 .frase .resp{background:var(--verde-claro);padding:10px 16px;font-size:12.5px;color:var(--verde-osc);font-weight:800;display:flex;justify-content:space-between;align-items:center;gap:10px}
 .frase .resp button{background:var(--verde);color:#fff;border-radius:999px;padding:5px 11px;font-size:11.5px;font-weight:900;white-space:nowrap}
 .nota-citas{font-size:11.5px;color:var(--gris);margin-top:8px}
+.otra-ronda{display:block;margin:10px auto 0;background:#fff;border:1.5px solid var(--zero);color:var(--zero);font-weight:800;border-radius:999px;padding:8px 18px;font-size:13px}
+.otra-ronda:hover{background:var(--agua-claro)}
 
 /* ---------- denuncias (enlaces reales) ---------- */
 .denuncias{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));margin-bottom:10px}
@@ -415,7 +417,7 @@ footer b{color:#fff}
 .caja .acciones{display:flex;gap:10px;flex-wrap:wrap}
 .caja .acciones a{text-decoration:none}
 
-#rejilla,#relampago,#colonias,#piramide,#cats,#denunciar{scroll-margin-top:90px}
+#rejilla,#relampago,#colonias,#piramide,#cats,#rejr{scroll-margin-top:90px}
 
 @media(max-width:860px){
   .hlinks{display:none}
@@ -500,7 +502,7 @@ footer b{color:#fff}
       <input id="q" placeholder="Busca: olor, turbia, piel, inundación…" aria-label="Buscar">
       <button type="submit">Buscar</button>
     </form>
-    <nav class="hlinks"><a href="#relampago">Relámpago</a><a href="#colonias">Tu colonia</a><a href="#piramide">Gana dinero</a><a href="#denunciar">Denunciar</a></nav>
+    <nav class="hlinks"><a href="#relampago">Relámpago</a><a href="#colonias">Tu colonia</a><a href="#piramide">Gana dinero</a><a href="#rejr">Opiniones</a></nav>
     <button class="carrito" id="btncar" onclick="abrirCarrito()">🛒 <span class="txt">Carrito</span> <b id="ncar">0</b></button>
   </div>
 </header>
@@ -600,6 +602,7 @@ footer b{color:#fff}
 
   <div class="sec-t"><h2>🎙️ Frases oficiales del temporal</h2><span>Citas textuales con respuesta de la casa</span></div>
   <section id="frases"></section>
+  <button class="otra-ronda" onclick="pintarFrases()">🔀 Otra ronda de frases</button>
   <p class="nota-citas">Citas textuales tomadas de medios (fuentes al finalizar la compra). Las respuestas en verde son de AGUA ZERO. Las autoridades citadas no respaldan esta tienda.</p>
 
   <div class="sec-t"><h2>🏆 Programa Vecino Distribuidor</h2></div>
@@ -615,16 +618,13 @@ footer b{color:#fff}
 
   <div class="sec-t"><h2>⭐ Clientes satisfechos de tu zona</h2><span>4.9 de 5 · 190k reseñas</span></div>
   <section class="rejr" id="rejr"></section>
-
-  <div class="sec-t" id="denunciar"><h2>📣 Reporta y denuncia</h2><span>Enlaces reales a dependencias y organizaciones</span></div>
-  <section class="denuncias" id="denuncias"></section>
-  <p class="nota-citas" id="tipden"></p>
+  <button class="otra-ronda" onclick="pintarResenas()">🔀 Ver más opiniones</button>
 </main>
 
 <footer>
   <div class="fw">
     <div><h4 id="razon">AGUA ZERO S.A. de C.V.</h4>Proveedor privado de soluciones hídricas personales. Sin relación con organismos operadores municipales o estatales.</div>
-    <div><h4>Atención a clientes</h4>Respondemos en 5 minutos.<br>Para el agua de tu casa: <a href="#denunciar" style="color:#fff;font-weight:800">reporta y denuncia aquí</a>.</div>
+    <div><h4>Atención a clientes</h4>Respondemos en 5 minutos.<br>Para el agua de tu casa: consulte a su organismo operador.</div>
     <div><h4>Políticas</h4>Aviso de privacidad · Términos y condiciones · Envíos · Devoluciones · Licitaciones</div>
     <div class="legal">
       <p>*Entrega sujeta a la altura del agua. Los productos aquí ofrecidos son de carácter personal, cosmético y perceptual. No modifican la composición del agua, la infraestructura de distribución, el drenaje ni la estabilidad del subsuelo. Los resultados mostrados son ilustrativos. La empresa no se hace responsable por inundaciones, hundimientos, afectaciones a la piel, al estómago o a los ojos, ni por la persistencia del problema una vez aplicado el producto. La satisfacción declarada por el cliente constituye la única métrica de eficacia reconocida por esta empresa.</p>
@@ -940,7 +940,22 @@ const RESENAS = [
  {n:"Fer G.", col:"Jardines del Country", p:"traje", t:"Lo pedí para el temporal y ahora también lo uso para bañarme. Muy versátil."},
  {n:"Sra. Lupe", col:"Oblatos", p:"locion", t:"Llevo 8 meses esperando respuesta de mi reporte. Aquí me contestaron en 5 minutos. Servicio de diez."},
  {n:"Mamá de Sofi", col:"Colinas de Tonalá", p:"fecalfriends", t:"A mi hija le salió la Pipa Legendaria. Es la única pipa que ha llegado a la casa este año."},
- {n:"Ing. Rodrigo", col:"El Deán", p:"spa", t:"Me quedé dos horas en López Mateos con el agua a media puerta. Con el spa ni sentí el tráfico."}
+ {n:"Ing. Rodrigo", col:"El Deán", p:"spa", t:"Me quedé dos horas en López Mateos con el agua a media puerta. Con el spa ni sentí el tráfico."},
+ {n:"Paty R.", col:"Miravalle", p:"minipipa", t:"Le puse nombre: la Pipa de la Esperanza. Llegó en 2 días; la del municipio sigue en camino."},
+ {n:"Don Chuy", col:"Atlas", p:"temporizador", t:"Ahora sé exactamente a qué hora no va a llegar el agua. Me organizo mucho mejor."},
+ {n:"Lety S.", col:"Oblatos", p:"pomada", t:"Las ronchas se calmaron en una semana. Me volví a bañar y regresaron. Ya pedí tres frascos."},
+ {n:"Familia Ramírez", col:"Vistas del Pedregal", p:"cultivo", t:"Mi hijo identificó cuatro especies en el agua de la cocina. La maestra le puso diez."},
+ {n:"Mario T.", col:"Moderna", p:"baches", t:"Tapé el bache de mi cuadra. Al día siguiente se abrió otro al lado. Excelente producto, ya pedí el de 12 latas."},
+ {n:"Alejandra", col:"Chapalita", p:"pastillas", t:"Le eché dos pastillas al agua color chocolate y quedó color café con leche. Vamos avanzando."},
+ {n:"Gaby M.", col:"Del Fresno", p:"banoseco", t:"Tres semanas sin abrir la regadera. Mi piel nunca había estado tan sana."},
+ {n:"Toño", col:"Huentitán", p:"baston", t:"Lo uso para cruzar la Calzada cuando llueve. Marcó 48 cm y un obstáculo: el bache de siempre."},
+ {n:"Abuela Chela", col:"Independencia Oriente", p:"desparasitante", t:"Lo compro para toda la familia cada mes. Los nietos ya lo ven como tradición, igual que el pozole."},
+ {n:"Cliente verificado", col:"Pinar de la Calma", p:"coliformometro", t:"Marcó ALTO en la llave, en la regadera y en el garrafón. Muy confiable: siempre da lo mismo."},
+ {n:"Ximena L.", col:"Nueva Primavera", p:"mochila", t:"La llevé al trabajo en pleno temporal. Llegué empapada, pero con agua para toda la semana."},
+ {n:"Rubén", col:"Ciudad Granja", p:"esferas", t:"Eché las esferas al charco de la esquina. Crecieron tanto que ahora el charco es de gel."},
+ {n:"Maestra Ofelia", col:"El Zalate", p:"acuario", t:"Lo usamos en clase de ciencias con agua del bebedero de la escuela. Desde entonces los niños traen su garrafón."},
+ {n:"Memo", col:"Jardines del Country", p:"casco", t:"Lo estrené en la marcha. Aguantó el chorro, el gas y a mi suegra, que también fue."},
+ {n:"Sofi (8 años)", col:"Colinas de Tonalá", p:"fecalfriends", t:"Ya tengo a Coli Jr. y a Tuberius. Me falta Lodo Real, mi mamá dice que ese sale en la llave."}
 ];
 
 /* ============================================================
@@ -959,7 +974,27 @@ const FRASES = [
  {q:"Llegará menos agua a nuestra ciudad, pero será de mejor calidad.", who:"Verónica Delgadillo", cargo:"Presidenta municipal de Guadalajara · 16 oct 2026",
   r:"Menos agua, más popotes.", p:"popote"},
  {q:"No encontramos metales pesados como mercurio, arsénico, plomo, etcétera.", who:"Secretaría de Salud Jalisco", cargo:"Sobre 270 muestras de plantas potabilizadoras · 2026",
-  r:"Monitoreo ciudadano IMDEC: plomo en 32 de 256 muestras.", p:"pastillas"}
+  r:"Monitoreo ciudadano IMDEC: plomo en 32 de 256 muestras.", p:"pastillas"},
+ {q:"Dejar correr el agua.", who:"Antonio Juárez Trueba", cargo:"Director del SIAPA · consejo a usuarios, mar 2026",
+  r:"Mientras corre, báñate en seco.", p:"banoseco"},
+ {q:"Él nunca dijo que se lavaran la boca con esa agua.", who:"Antonio Juárez Trueba", cargo:"Director del SIAPA, ante el Congreso de Jalisco · mar 2026",
+  r:"Para la boca, pastillas neutralizadoras.", p:"pastillas"},
+ {q:"Aproximadamente estamos teniendo estos problemas… en el 9.6% de las colonias.", who:"Antonio Juárez Trueba", cargo:"Director del SIAPA · 6 mar 2026",
+  r:"Para julio ya eran 650 colonias. Tenemos stock para todas.", p:"kit"},
+ {q:"Los reportes que tuvimos en marzo fueron aproximadamente mil 36… hoy hemos tenido reportes que representan prácticamente 136 o 150.", who:"Ismael Jáuregui Castañeda", cargo:"Director del SIAPA · 3 jun 2026",
+  r:"De 784 personas que reportaron, 469 nunca recibieron respuesta. Mide tú.", p:"coliformometro"},
+ {q:"La principal causa del agua sucia está en el sistema antiguo de abastecimiento que trae líquido del Lago de Chapala.", who:"Pablo Lemus", cargo:"Gobernador · 6 oct 2026",
+  r:"Nuestro colector pluvial sí trae manual de mantenimiento.", p:"colector"},
+ {q:"Es una decisión difícil, pero responsable.", who:"Pablo Lemus", cargo:"Gobernador, al anunciar seis meses de tandeos · 6 oct 2026",
+  r:"Igual que comprar un temporizador.", p:"temporizador"},
+ {q:"Dos, máximo tres días, no más de eso.", who:"Pablo Lemus", cargo:"Gobernador, sobre los días sin agua por colonia · 7 oct 2026",
+  r:"La Mini Pipa carga 30 litros. Haz cuentas.", p:"minipipa"},
+ {q:"He acordado con la Presidenta Claudia Sheinbaum que esas obras serán ejecutadas y pagadas por la Federación.", who:"Pablo Lemus", cargo:"Gobernador · 6 oct 2026",
+  r:"Las obras de tu casa las pagas tú. A meses sin intereses.", p:"colector"},
+ {q:"Pedir paciencia pues no se me haría justo.", who:"Juan José Frangie", cargo:"Presidente municipal de Zapopan · 26 oct 2026",
+  r:"Nosotros tampoco pedimos paciencia. Pedimos tu tarjeta.", p:"kit"},
+ {q:"Los grandes consumidores, los hoteleros, los empresarios, ¡que paguen su agua!", who:"Juan José Frangie", cargo:"Presidente municipal de Zapopan · 26 oct 2026",
+  r:"Tú ya pagas la tuya dos veces: recibo y garrafón.", p:"pastillas"}
 ];
 
 /* ============================================================
@@ -1032,7 +1067,13 @@ const FUENTES = [
  "Proceso (24 abr 2026). Detectan metales y contaminación fecal en el agua potable de la ZMG.",
  "La Jornada (1 jul 2026). Agua sin cloro en 93% de muestras; indicios de E. coli y metales pesados.",
  "Azteca Jalisco / N+ (oct 2026). Monitoreo IMDEC: 256 muestras en 110 colonias; respuesta de la Secretaría de Salud Jalisco.",
- "Meganoticias y El Informador (2024–2026). Socavones en Joaquín Angulo y Humboldt, Jesús y Juan Manuel, López Mateos Sur y avenida Malecón."
+ "Meganoticias y El Informador (2024–2026). Socavones en Joaquín Angulo y Humboldt, Jesús y Juan Manuel, López Mateos Sur y avenida Malecón.",
+ "El Informador (6 mar 2026). SIAPA: cerca del 10% de colonias en ZMG, con reportes de agua turbia o con mal olor.",
+ "ADN40 (13 mar 2026). Diputados de Jalisco dan ultimátum al director del SIAPA por el agua turbia.",
+ "Mural, vía agua.org.mx (3 jun 2026). Caen 86% reportes por agua turbia, asegura el SIAPA.",
+ "UdGTV (6 oct 2026). Lemus anuncia tandeos de agua por medio año como solución a corto plazo por agua turbia.",
+ "Proceso (7 oct 2026). Guadalajara reducirá suministro de agua potable por «crisis sin precedentes».",
+ "Siker (27 oct 2026). Frangie exige reingeniería del Siapa ante crisis del agua."
 ];
 
 /* ============================================================
@@ -1123,12 +1164,25 @@ $('rank').innerHTML = COLONIAS.map(([c,n],i)=>`
 
 /* ---------- frases oficiales ---------- */
 const iniciales = s => s.split(" ").filter(w=>w.length>2).slice(0,2).map(w=>w[0]).join("");
-$('frases').innerHTML = FRASES.map(f=>`
+// baraja: cada ronda muestra POR_RONDA elementos y no repite hasta agotar la lista
+const POR_RONDA = 6;
+function baraja(lista){
+  let mazo = [];
+  return () => {
+    if(mazo.length < POR_RONDA) mazo = mazo.concat([...lista].sort(()=>Math.random()-.5).filter(x=>!mazo.includes(x)));
+    return mazo.splice(0, POR_RONDA);
+  };
+}
+const sigFrases = baraja(FRASES);
+function pintarFrases(){
+  $('frases').innerHTML = sigFrases().map(f=>`
   <div class="frase">
     <blockquote>${f.q}</blockquote>
     <div class="quien"><span class="av">${iniciales(f.who)}</span><span><b>${f.who}</b><i>${f.cargo}</i></span></div>
     <div class="resp"><span>${f.r}</span><button onclick="abrirFicha('${f.p}')">Ver producto</button></div>
   </div>`).join("");
+}
+pintarFrases();
 
 /* ---------- tabla nutrimental ---------- */
 $('nutri').innerHTML = `
@@ -1144,18 +1198,18 @@ $('efectos').innerHTML = EFECTOS.map(e=>`
   <div class="efecto${e.promo?" promo":""}"><b>${e.t}</b><span>${e.d}</span>
   <div style="margin-top:7px"><button class="btn" style="padding:5px 12px;font-size:11.5px" onclick="abrirFicha('${e.p}')">Solución: ${corto(prod(e.p))}</button></div></div>`).join("");
 
-/* ---------- denuncias ---------- */
-$('denuncias').innerHTML = tarjetasDenuncia();
-$('tipden').textContent = TIP_DENUNCIA;
-
 /* ---------- reseñas ---------- */
-$('rejr').innerHTML = RESENAS.map(r=>`
+const sigResenas = baraja(RESENAS);
+function pintarResenas(){
+  $('rejr').innerHTML = sigResenas().map(r=>`
   <div class="res">
     <div class="top">
       <span class="quien"><span class="av">${r.n[0]}</span><span>${r.n}<i>${r.col}</i></span></span>
       <b style="color:var(--verde);letter-spacing:-1px">★★★★★</b>
     </div><p>${r.t}</p>
     <div class="compro">✓ Compra verificada · ${corto(prod(r.p))}</div></div>`).join("");
+}
+pintarResenas();
 
 /* ---------- estadísticas (GoatCounter, se ven en /visitas) ----------
    "embudo-*" cuenta personas únicas por etapa; el resto es el detalle. */
