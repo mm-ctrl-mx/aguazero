@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>AGUA ZERO™ — Soluciones para todo</title>
+<link rel="icon" href="img/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800;6..12,900&display=swap" rel="stylesheet">
+<!--
+  Presentación AGUA ZERO™ (sigue el storyboard de gancho.pdf).
+  Navegación: → / espacio / clic = avanzar · ← = regresar · I = índice
+              M = música on/off · F = pantalla completa · Inicio / Fin
+  Cada diapositiva declara su música con data-musica (archivo en musica/);
+  data-vol es el volumen y data-una-vez evita que se repita.
+  Los elementos .paso aparecen uno por uno dentro de la diapositiva.
+  La tienda en vivo se busca en ../agua-zero/index.html, luego en ../index.html
+  (si esta carpeta vive dentro de agua-zero/) y si no, en https://aguazero.lol.
+-->
+<style>
+:root{
+  --agua:#6487B6; --agua-claro:#E7EEF7;
+  --zero:#0B5E62; --zero-osc:#073F42;
+  --verde:#1DAA3C; --verde-osc:#158A2F; --verde-claro:#E6F6EA;
+  --gota:#1F78AE; --gota-claro:#A9CBE6; --azul-pdf:#3A75A4;
+  --tinta:#10292A; --gris:#6B7778; --linea:#E3E9EA; --fondo:#F2F5F6;
+  --display:"Bebas Neue",Impact,"Arial Narrow",sans-serif;
+  --texto:"Nunito Sans",system-ui,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#041819;overflow:hidden}
+body{font-family:var(--texto);color:var(--tinta)}
+button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+
+/* ---------- escenario 16:9 a 1920×1080, escalado a la ventana ---------- */
+#escenario{position:absolute;left:50%;top:50%;width:1920px;height:1080px;transform-origin:center;overflow:hidden;background:var(--fondo)}
+.slide{position:absolute;inset:0;padding:110px 130px 120px;display:flex;flex-direction:column;justify-content:center;
+  opacity:0;visibility:hidden;transition:opacity .5s,visibility 0s .5s}
+.slide.activa{opacity:1;visibility:visible;transition:opacity .5s}
+.azul{background:radial-gradient(circle at 82% 22%,rgba(169,203,230,.35) 0,transparent 40%),linear-gradient(125deg,var(--zero-osc) 0%,var(--zero) 30%,var(--gota) 75%,var(--agua) 100%);color:#fff}
+.oscura{background:radial-gradient(circle at 20% 80%,rgba(31,120,174,.35) 0,transparent 45%),linear-gradient(160deg,#061F21,var(--zero-osc) 60%,#0A3A4F);color:#fff}
+.clara{background:var(--fondo)}
+
+/* logo pequeño de esquina, como en el storyboard */
+.marca{position:absolute;top:44px;left:60px;width:92px;height:92px}
+.clara .marca{filter:none}
+
+/* barra de urgencia de la tienda */
+.urgencia{position:absolute;top:0;left:0;right:0;height:62px;display:flex;align-items:center;justify-content:center;gap:16px;
+  background:linear-gradient(90deg,var(--zero-osc),var(--zero) 45%,var(--gota));color:#fff;font-weight:900;font-size:24px}
+.urgencia .reloj{display:flex;gap:6px}
+.urgencia .reloj span{background:#fff;color:var(--zero);border-radius:6px;padding:0 9px;font-variant-numeric:tabular-nums}
+.urgencia ~ .marca{top:90px}
+
+/* tipografía */
+.punch{font-family:var(--display);font-weight:400;line-height:.92;letter-spacing:1px}
+.p-xl{font-size:200px}.p-l{font-size:150px}.p-m{font-size:112px}.p-s{font-size:84px}
+.punch em{font-style:normal;color:var(--gota-claro)}
+.una-palabra{font-size:300px;letter-spacing:6px;line-height:.85}
+.una-palabra em{font-size:.62em;display:block;margin-top:24px}
+.clara .punch{color:var(--zero)} .clara .punch em{color:var(--verde)}
+.sub{font-size:40px;font-weight:700;margin-top:30px;opacity:.92;max-width:1300px}
+.centro{align-items:center;text-align:center}
+.centro .sub{margin-left:auto;margin-right:auto}
+
+/* pasos (aparecen uno por uno) */
+.paso{opacity:0;transform:translateY(24px);transition:opacity .45s,transform .45s}
+.paso.ver{opacity:1;transform:none}
+
+/* chips estilo tienda */
+.chips{display:flex;gap:18px;flex-wrap:wrap;margin-top:50px}
+.chip{background:rgba(255,255,255,.14);border:2px solid rgba(255,255,255,.35);border-radius:999px;padding:14px 30px;font-size:36px;font-weight:800}
+.clara .chip{background:#fff;border-color:var(--linea);color:var(--zero)}
+.chip.verde{background:var(--verde);border-color:var(--verde);color:#fff}
+
+/* ---------- 2 · logo ---------- */
+.logo-grande{width:520px;height:520px;animation:latido 2.4s ease-in-out infinite;filter:drop-shadow(0 20px 60px rgba(0,0,0,.35))}
+.activa .logo-grande{animation:entra 1s cubic-bezier(.2,1.4,.4,1) both, latido 2.4s 1s ease-in-out infinite}
+@keyframes entra{from{transform:scale(.3) rotate(-20deg);opacity:0}}
+@keyframes latido{50%{transform:scale(1.04)}}
+.marca-tm{font-family:var(--display);font-size:150px;line-height:1;margin-top:20px;letter-spacing:4px}
+.marca-tm sup{font-size:50px;vertical-align:top}
+.gota{position:absolute;width:26px;height:26px;background:var(--gota-claro);border-radius:0 50% 50% 50%;transform:rotate(45deg);opacity:.5;animation:cae linear infinite}
+@keyframes cae{from{top:-40px}to{top:1120px}}
+
+/* ---------- 3 · datos ---------- */
+.datos{display:grid;grid-template-columns:1060px 1fr;gap:70px;align-items:center;height:100%}
+.mapa{position:relative;border-radius:26px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.35);border:6px solid #fff}
+.mapa img{display:block;width:100%}
+.mapa .vivo{position:absolute;left:22px;top:22px;background:#fff;color:var(--zero);border-radius:999px;padding:10px 22px;font-weight:900;font-size:24px;display:flex;align-items:center;gap:10px}
+.mapa .vivo i{width:14px;height:14px;border-radius:50%;background:#E0453A;animation:parpadea 1s infinite}
+@keyframes parpadea{50%{opacity:.2}}
+.cifras{display:grid;gap:26px}
+.cifra b{display:block;font-family:var(--display);font-weight:400;font-size:126px;line-height:.9;color:#fff}
+.cifra span{font-size:30px;font-weight:700;color:var(--gota-claro);line-height:1.2}
+.cifra.roja b{color:#FFB4A8}
+
+/* ---------- productos ---------- */
+.rejilla-prod{display:grid;grid-template-columns:repeat(6,1fr);gap:22px;margin-top:50px}
+.mini{background:#fff;border-radius:18px;overflow:hidden;position:relative;box-shadow:0 10px 30px rgba(11,94,98,.12)}
+.mini img{display:block;width:100%;aspect-ratio:1;object-fit:cover}
+.mini b{position:absolute;top:10px;left:10px;background:var(--verde);color:#fff;font-weight:900;font-size:22px;padding:3px 10px;border-radius:6px}
+.activa .mini{animation:pop .5s both}
+@keyframes pop{from{transform:scale(.6);opacity:0}}
+
+.producto{display:grid;grid-template-columns:1fr 660px;gap:80px;align-items:center;height:100%}
+.tarjeta{background:#fff;border-radius:28px;overflow:hidden;box-shadow:0 30px 80px rgba(11,94,98,.22)}
+.tarjeta .foto{position:relative;aspect-ratio:1.6;overflow:hidden;background:var(--fondo)}
+.tarjeta .foto img{width:100%;height:100%;object-fit:cover}
+.tarjeta .desc{position:absolute;top:20px;left:20px;background:var(--verde);color:#fff;font-weight:900;font-size:34px;padding:4px 16px;border-radius:8px}
+.tarjeta .viendo{position:absolute;left:20px;right:20px;bottom:20px;background:rgba(7,63,66,.85);color:#fff;font-size:24px;font-weight:700;padding:10px 18px;border-radius:10px}
+.tarjeta .info{padding:22px 30px 28px;display:grid;gap:10px}
+.tarjeta .nom{font-size:34px;font-weight:800;line-height:1.15}
+.tarjeta .estrellas{font-size:22px;color:var(--gris)} .tarjeta .estrellas b{color:var(--verde)}
+.tarjeta .precios{display:flex;align-items:baseline;gap:18px}
+.tarjeta .precio{font-family:var(--display);font-size:84px;line-height:.9;color:var(--zero)}
+.tarjeta .antes{font-size:30px;color:var(--gris);text-decoration:line-through}
+.tarjeta .quedan{justify-self:start;background:var(--agua-claro);color:var(--zero);font-weight:800;font-size:22px;padding:6px 14px;border-radius:8px}
+.tarjeta .add{background:var(--verde);color:#fff;font-weight:900;font-size:28px;border-radius:999px;padding:14px;text-align:center;margin-top:4px}
+.pregunta .punch{color:var(--zero)}
+.respuesta{font-size:46px;font-weight:800;margin-top:34px;color:var(--tinta)}
+.respuesta span{color:var(--verde-osc)}
+.sello{position:absolute;right:150px;top:110px;width:300px;height:300px;border-radius:50%;background:#E0453A;color:#fff;display:grid;place-content:center;text-align:center;
+  transform:rotate(-12deg);border:10px solid #fff;box-shadow:0 20px 50px rgba(0,0,0,.3);font-weight:900;font-size:30px;line-height:1.05;z-index:3}
+.sello b{display:block;font-family:var(--display);font-weight:400;font-size:130px;line-height:.85}
+
+/* toasts de compra */
+.toasts{display:grid;gap:18px;margin-top:60px;justify-items:center}
+.toast{display:flex;gap:18px;align-items:center;background:#fff;color:var(--tinta);border-radius:18px;padding:12px 26px 12px 12px;font-size:28px;box-shadow:0 14px 40px rgba(0,0,0,.25);min-width:760px;text-align:left}
+.toast img{width:76px;height:76px;border-radius:12px;object-fit:cover}
+.toast b{color:var(--zero)} .toast i{display:block;font-style:normal;color:var(--gris);font-size:22px}
+
+/* ---------- navegador con la tienda ---------- */
+.navegador{background:#fff;border-radius:22px;overflow:hidden;box-shadow:0 30px 90px rgba(0,0,0,.4);display:flex;flex-direction:column}
+.navegador .barra{height:64px;background:#E9EEF0;display:flex;align-items:center;gap:12px;padding:0 22px;flex:none}
+.navegador .barra i{width:16px;height:16px;border-radius:50%;background:#E0453A}.navegador .barra i+i{background:#F2B33D}.navegador .barra i+i+i{background:var(--verde)}
+.navegador .url{flex:1;margin-left:16px;background:#fff;border-radius:999px;padding:8px 22px;font-size:24px;font-weight:700;color:var(--zero)}
+.navegador .vista{position:relative;flex:1;overflow:hidden;background:var(--fondo)}
+.navegador iframe{border:0;position:absolute;left:0;top:0;transform-origin:0 0}
+.pantalla{display:grid;grid-template-columns:1fr 1180px;gap:70px;align-items:center;height:100%}
+.pantalla .navegador{height:760px}
+.pantalla iframe{pointer-events:none}
+.en-vivo{position:absolute;inset:40px 60px 60px}
+.en-vivo .navegador{height:100%}
+.etiqueta-vivo{position:absolute;top:18px;right:30px;z-index:2;background:#E0453A;color:#fff;font-weight:900;font-size:22px;padding:6px 16px;border-radius:999px}
+
+/* ---------- equipo ---------- */
+.area{display:inline-block;align-self:flex-start;background:var(--verde);color:#fff;font-weight:900;font-size:28px;letter-spacing:2px;padding:8px 22px;border-radius:8px;margin-bottom:28px;text-transform:uppercase}
+.miembros{display:flex;gap:46px;margin-top:70px;flex-wrap:wrap}
+.miembro{width:330px;text-align:center}
+.foto-pend{width:300px;height:300px;margin:0 auto 22px;border-radius:50%;border:5px dashed rgba(255,255,255,.55);display:grid;place-content:center;
+  background:rgba(255,255,255,.08);font-family:var(--display);font-size:110px;color:rgba(255,255,255,.85);position:relative}
+.foto-pend::after{content:"foto";position:absolute;bottom:34px;left:0;right:0;font-family:var(--texto);font-size:22px;font-weight:800;letter-spacing:3px;text-transform:uppercase;opacity:.7}
+.miembro b{display:block;font-size:34px;font-weight:900}
+.miembro span{font-size:24px;color:var(--gota-claro);font-weight:700}
+.direccion .miembro{width:520px}.direccion .foto-pend{width:400px;height:400px;font-size:150px}
+
+/* ---------- cierre ---------- */
+.cierre{display:grid;grid-template-columns:1fr 520px;gap:90px;align-items:center;height:100%}
+.qr{background:#fff;border-radius:32px;padding:34px;text-align:center;box-shadow:0 30px 90px rgba(0,0,0,.4)}
+.qr svg{display:block;width:100%;height:auto}
+.qr b{display:block;font-size:30px;font-weight:900;color:var(--zero);margin-top:16px}
+.sitio{display:inline-block;margin-top:46px;background:#fff;color:var(--zero);font-weight:900;font-size:64px;border-radius:999px;padding:16px 50px;text-decoration:none}
+.gracias{font-size:36px;font-weight:800;margin-top:40px;color:var(--gota-claro)}
+
+/* ---------- controles (fuera del escenario) ---------- */
+#controles{position:fixed;left:0;right:0;bottom:0;height:46px;display:flex;align-items:center;gap:10px;padding:0 14px;background:rgba(4,24,25,.82);color:#fff;font-size:14px;font-weight:700;z-index:20;
+  transition:opacity .4s}
+body.quieto #controles{opacity:0}
+#controles button{height:32px;min-width:36px;padding:0 10px;border-radius:8px;background:rgba(255,255,255,.1);font-size:15px}
+#controles button:hover{background:rgba(255,255,255,.22)}
+#progreso{flex:1;height:16px;background:rgba(29,170,60,.18);border-radius:999px;overflow:hidden;position:relative;cursor:pointer}
+#progreso i{display:block;height:100%;background:var(--verde);transition:width .4s}
+#progreso span{position:absolute;inset:0;font-size:11px;font-weight:900;display:flex;align-items:center;padding-left:10px;text-shadow:0 0 3px rgba(0,0,0,.5)}
+#sonando{display:flex;align-items:center;gap:7px;min-width:190px;opacity:.85}
+.eq{display:flex;gap:2px;align-items:flex-end;height:14px}
+.eq i{width:3px;background:var(--verde);animation:eq .8s ease-in-out infinite}
+.eq i:nth-child(2){animation-delay:.2s}.eq i:nth-child(3){animation-delay:.4s}
+@keyframes eq{0%,100%{height:3px}50%{height:14px}}
+.mudo .eq i{animation:none;height:3px;background:#888}
+
+#indice{position:fixed;inset:0;background:rgba(4,24,25,.94);z-index:30;display:none;overflow:auto;padding:40px}
+#indice.abierto{display:block}
+#indice h2{font-family:var(--display);font-weight:400;color:#fff;font-size:44px;margin-bottom:20px}
+#indice .lista{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+#indice button{background:#fff;color:var(--tinta);border-radius:14px;padding:14px 16px;text-align:left;font-weight:800;font-size:15px;display:grid;gap:4px;border-top:5px solid var(--gota)}
+#indice button small{color:var(--gris);font-weight:700}
+#indice button[aria-current="true"]{border-top-color:var(--verde);outline:3px solid var(--verde)}
+#inicio{position:fixed;inset:0;z-index:40;display:grid;place-items:center;background:rgba(4,24,25,.55);color:#fff;font-weight:800;font-size:20px;cursor:pointer}
+#inicio div{background:var(--verde);padding:16px 34px;border-radius:999px;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+</style>
+</head>
+<body>
+<div id="escenario">
+
+  <!-- 1 -->
+  <section class="slide oscura centro" data-titulo="Años sin agua limpia.">
+    <h1 class="punch una-palabra">Años<br><em>sin agua limpia.</em></h1>
+  </section>
+
+  <!-- 2 -->
+  <section class="slide oscura centro" data-titulo="¿Qué sale de tu llave?">
+    <h2 class="punch p-l">¿De verdad quieres saber<br><em>qué sale de tu llave?</em></h2>
+    <div class="chips" style="justify-content:center">
+      <span class="chip paso">🤢 Mal olor</span><span class="chip paso">🟤 Agua turbia</span><span class="chip paso">🌊 Inundaciones</span><span class="chip paso">🕳️ Socavones</span>
+    </div>
+    <p class="sub paso">Guadalajara necesita respuestas.</p>
+  </section>
+
+  <!-- 2 -->
+  <section class="slide azul centro" data-titulo="AGUA ZERO™" data-musica="2aguazweimp3.mp3" data-vol="1" data-una-vez>
+    <div class="lluvia"></div>
+    <img class="logo-grande" src="img/logo-blanco.png" alt="AGUA ZERO">
+    <div class="marca-tm">AGUA ZERO<sup>™</sup></div>
+    <p class="sub" style="margin-top:6px;font-size:46px">Soluciones para todo.</p>
+  </section>
+
+  <!-- 3 -->
+  <section class="slide azul" data-titulo="84% · 520 colonias">
+    <div class="datos">
+      <div class="mapa"><img src="img/mapa-reportes.jpg" alt="Mapa de reportes ciudadanos de agua en la ZMG"><span class="vivo"><i></i>1,477 reportes ciudadanos · IMDEC 2026</span></div>
+      <div class="cifras">
+        <div class="cifra paso"><b>84%</b><span>recibe agua con mal olor, turbia o con sedimentos</span></div>
+        <div class="cifra paso"><b>+520</b><span>colonias afectadas</span></div>
+        <div class="cifra paso"><b>51.9%</b><span>de los hogares: alguien enfermó por el agua</span></div>
+        <div class="cifra paso"><b>73%</b><span>lleva meses o más de un año así</span></div>
+        <div class="cifra roja paso"><b>6 de 784</b><span>quejas al SIAPA terminaron resueltas</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 -->
+  <section class="slide oscura" data-titulo="Donde hay urgencia, hay mercado">
+    <img class="marca" src="img/logo-blanco.png" alt="">
+    <p class="punch p-s paso">Red de hasta <em>70 años.</em></p>
+    <p class="punch p-s paso">Inundaciones de <em>metro y medio.</em></p>
+    <p class="punch p-s paso"><em>2,693</em> hundimientos desde 2010.</p>
+    <p class="punch p-s paso">Pagas dos veces: <em>recibo y garrafón.</em></p>
+    <p class="punch p-l paso" style="margin-top:50px;color:#fff">Donde hay urgencia, <em style="color:var(--verde)">hay mercado.</em></p>
+  </section>
+
+  <!-- 5 -->
+  <section class="slide clara" data-titulo="Un producto para cada problema">
+    <div class="urgencia">⚡ OFERTAS DE TEMPORAL — hasta 90% de descuento <span class="reloj"><span data-h>02</span>:<span data-m>47</span>:<span data-s>13</span></span></div>
+    <h2 class="punch p-l" style="margin-top:40px">Un producto<br><em>para cada problema.</em></h2>
+    <div class="rejilla-prod">
+      <div class="mini" style="animation-delay:.05s"><img src="img/tapones-1.jpg" alt=""><b>-90%</b></div>
+      <div class="mini" style="animation-delay:.1s"><img src="img/locion-1.jpg" alt=""><b>-89%</b></div>
+      <div class="mini" style="animation-delay:.15s"><img src="img/pomada-1.jpg" alt=""><b>-90%</b></div>
+      <div class="mini" style="animation-delay:.2s"><img src="img/popote-1.jpg" alt=""><b>-90%</b></div>
+      <div class="mini" style="animation-delay:.25s"><img src="img/coliformometro-1.jpg" alt=""><b>-90%</b></div>
+      <div class="mini" style="animation-delay:.3s"><img src="img/manifestante-1.jpg" alt=""><b>-90%</b></div>
+      <div class="mini" style="animation-delay:.35s"><img src="img/minipipa-1.jpg" alt=""><b>-90%</b></div>
+      <div class="mini" style="animation-delay:.4s"><img src="img/spa-1.jpg" alt=""><b>-90%</b></div>
+      <div class="mini" style="animation-delay:.45s"><img src="img/fecalfriends-1.jpg" alt=""><b>-90%</b></div>
+      <div class="mini" style="animation-delay:.5s"><img src="img/banoseco-1.jpg" alt=""><b>-90%</b></div>
+      <div class="mini" style="animation-delay:.55s"><img src="img/baston-1.jpg" alt=""><b>-90%</b></div>
+      <div class="mini" style="animation-delay:.6s"><img src="img/colector-1.jpg" alt=""><b>-90%</b></div>
+    </div>
+  </section>
+
+  <!-- 6 -->
+  <section class="slide clara" data-titulo="Loción para no oler feo">
+    <img class="marca" src="img/logo.png" alt="">
+    <div class="producto">
+      <div class="pregunta"><h2 class="punch p-l">¿Hueles mal<br>después<br>de bañarte?</h2><p class="respuesta paso">Huele a <span>recién llovió, sin inundación.</span></p></div>
+      <div class="tarjeta paso">
+        <div class="foto"><img src="img/locion-1.jpg" alt=""><span class="desc">-89%</span><span class="viendo">🔥 312 personas viendo esto</span></div>
+        <div class="info"><div class="nom">Loción para no oler feo</div><div class="estrellas"><b>★★★★★</b> 4.8 · 28k vendidos</div>
+          <div class="precios"><span class="precio">$249</span><span class="antes">$2,290.00</span></div><span class="quedan">¡Solo quedan 5!</span><div class="add">Agregar al carrito</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 -->
+  <section class="slide clara" data-titulo="Filtro con popote">
+    <img class="marca" src="img/logo.png" alt="">
+    <div class="producto">
+      <div class="pregunta"><h2 class="punch p-l">¿Te da miedo<br>lo que hay<br>en el vaso?</h2><p class="respuesta paso">Tómatelo con <span>filtro.</span></p></div>
+      <div class="tarjeta paso">
+        <div class="foto"><img src="img/popote-1.jpg" alt=""><span class="desc">-90%</span><span class="viendo">🔥 187 personas viendo esto</span></div>
+        <div class="info"><div class="nom">Popote con filtro AGUA ZERO</div><div class="estrellas"><b>★★★★★</b> 4.7 · 19k vendidos</div>
+          <div class="precios"><span class="precio">$299</span><span class="antes">$2,990.00</span></div><span class="quedan">¡Solo quedan 2!</span><div class="add">Agregar al carrito</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 -->
+  <section class="slide clara" data-titulo="Pomada antirronchas">
+    <img class="marca" src="img/logo.png" alt="">
+    <div class="producto">
+      <div class="pregunta"><h2 class="punch p-l">¿Ronchas<br>después<br>de bañarte?</h2><p class="respuesta paso">Báñate igual. <span>Úntate después.</span></p></div>
+      <div class="tarjeta paso">
+        <div class="foto"><img src="img/pomada-1.jpg" alt=""><span class="desc">-90%</span><span class="viendo">🔥 241 personas viendo esto</span></div>
+        <div class="info"><div class="nom">Pomada Antirronchas AGUA ZERO</div><div class="estrellas"><b>★★★★★</b> 4.8 · 37k vendidos</div>
+          <div class="precios"><span class="precio">$219</span><span class="antes">$2,190.00</span></div><span class="quedan">¡Solo quedan 3!</span><div class="add">Agregar al carrito</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9 -->
+  <section class="slide clara" data-titulo="Coliformómetro">
+    <img class="marca" src="img/logo.png" alt="">
+    <div class="producto">
+      <div class="pregunta"><h2 class="punch p-l">¿Qué más<br>viene en<br>tu vaso?</h2><p class="respuesta paso">Descúbrelo en <span>10 segundos.</span></p></div>
+      <div class="tarjeta paso">
+        <div class="foto"><img src="img/coliformometro-1.jpg" alt=""><span class="desc">-90%</span><span class="viendo">🔥 98 personas viendo esto</span></div>
+        <div class="info"><div class="nom">Coliformómetro AGUA ZERO</div><div class="estrellas"><b>★★★★★</b> 4.8 · 6.7k vendidos</div>
+          <div class="precios"><span class="precio">$899</span><span class="antes">$8,990.00</span></div><span class="quedan">¡Solo queda 1!</span><div class="add">Agregar al carrito</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10 -->
+  <section class="slide clara" data-titulo="Kit de Manifestación Hídrica™">
+    <div class="urgencia">📣 PRECIO ESPECIAL: MARCHA DEL DOMINGO <span class="reloj"><span data-h>02</span>:<span data-m>47</span>:<span data-s>13</span></span></div>
+    <div class="sello paso"><b>-70%</b>marcha del<br>domingo</div>
+    <div class="producto">
+      <div class="pregunta"><h2 class="punch p-l">¿Marchas<br>el domingo?</h2><p class="respuesta paso">Casco, goggles y pañuelo. <span>Talla única.</span></p></div>
+      <div class="tarjeta">
+        <div class="foto"><img src="img/manifestante-1.jpg" alt=""><span class="desc">-70%</span><span class="viendo">🔥 1,204 personas viendo esto</span></div>
+        <div class="info"><div class="nom">Kit de Manifestación Hídrica™</div><div class="estrellas"><b>★★★★★</b> 4.9 · 4.5k vendidos</div>
+          <div class="precios"><span class="precio">$1,047</span><span class="antes">$3,490.00</span></div><span class="quedan">¡Solo queda 1!</span><div class="add">Agregar al carrito</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11 -->
+  <section class="slide azul centro" data-titulo="Siempre hay una alternativa de compra">
+    <img class="marca" src="img/logo-blanco.png" alt="">
+    <h2 class="punch p-xl">Siempre hay una<br><em>alternativa de compra.</em></h2>
+    <div class="toasts">
+      <div class="toast paso"><img src="img/minipipa-1.jpg" alt=""><div><b>Paty</b> de Miravalle compró<br>Mini Pipa Portátil<i>hace 1 min</i></div></div>
+      <div class="toast paso"><img src="img/pastillas-1.jpg" alt=""><div><b>Toño</b> de Jardines del Country compró<br>Pastillas Neutralizadoras<i>hace 2 min</i></div></div>
+      <div class="toast paso"><img src="img/fecalfriends-1.jpg" alt=""><div><b>Sofi</b> de Colinas de Tonalá compró<br>Fecal Friends serie Guadalajara<i>hace 3 min</i></div></div>
+    </div>
+  </section>
+
+  <!-- 12 -->
+  <section class="slide oscura" data-titulo="aguazero.lol">
+    <img class="marca" src="img/logo-blanco.png" alt="">
+    <div class="pantalla">
+      <div><h2 class="punch p-m">Tu crisis,<br><em>en un solo<br>carrito.</em></h2><p class="sub paso">28 productos · 11 categorías · envío gratis desde $299</p></div>
+      <div class="navegador"><div class="barra"><i></i><i></i><i></i><span class="url">🔒 aguazero.lol</span></div><div class="vista"><iframe data-tienda title="Tienda AGUA ZERO" tabindex="-1"></iframe></div></div>
+    </div>
+  </section>
+
+  <!-- 13 -->
+  <section class="slide azul centro" data-titulo="Tenemos un producto para ti">
+    <img class="marca" src="img/logo-blanco.png" alt="">
+    <h2 class="punch p-xl">No importa cuál sea<br>el problema:</h2>
+    <p class="punch p-l paso" style="color:var(--verde);margin-top:20px;text-shadow:0 6px 30px rgba(0,0,0,.25)">tenemos un producto para ti.</p>
+  </section>
+
+  <!-- 14 -->
+  <section class="slide oscura" data-titulo="Tienda en vivo" data-interactiva>
+    <div class="en-vivo">
+      <span class="etiqueta-vivo">● EN VIVO</span>
+      <div class="navegador"><div class="barra"><i></i><i></i><i></i><span class="url">🔒 aguazero.lol</span></div><div class="vista"><iframe data-tienda title="Tienda AGUA ZERO en vivo"></iframe></div></div>
+    </div>
+  </section>
+
+  <!-- 15 -->
+  <section class="slide azul" data-titulo="Siempre habrá algo que vender">
+    <img class="marca" src="img/logo-blanco.png" alt="">
+    <h2 class="punch p-l">Mientras existan necesidades<br>sin atender,</h2>
+    <p class="punch p-l paso"><em>siempre habrá algo que vender.</em></p>
+    <div class="chips paso"><span class="chip">🛒 Tienda en línea</span><span class="chip">📦 Productos y kits</span><span class="chip">📍 Toda la ZMG</span><span class="chip verde">Precios para cada bolsillo</span></div>
+  </section>
+
+  <!-- 16 -->
+  <section class="slide oscura" data-titulo="Investigación hídrica">
+    <img class="marca" src="img/logo-blanco.png" alt="">
+    <span class="area">Investigación hídrica</span>
+    <h2 class="punch p-m">Mapeamos lo que sale <em>de tu llave.</em></h2>
+    <div class="miembros">
+      <div class="miembro paso"><div class="foto-pend">PC</div><b>Paulina Covarrubias</b><span>Investigación hídrica</span></div>
+      <div class="miembro paso"><div class="foto-pend">MG</div><b>María Fernanda Gutiérrez</b><span>Investigación hídrica</span></div>
+    </div>
+  </section>
+
+  <!-- 17 -->
+  <section class="slide oscura" data-titulo="Ingeniería y producción">
+    <img class="marca" src="img/logo-blanco.png" alt="">
+    <span class="area">Ingeniería y producción</span>
+    <h2 class="punch p-m">Fabricamos la solución <em>antes que la ciudad.</em></h2>
+    <div class="miembros">
+      <div class="miembro paso"><div class="foto-pend">AF</div><b>Andrew Fontanot</b><span>Ingeniería y producción</span></div>
+      <div class="miembro paso"><div class="foto-pend">PT</div><b>Pablo Torres</b><span>Ingeniería y producción</span></div>
+      <div class="miembro paso"><div class="foto-pend">SO</div><b>Sara Ortega</b><span>Ingeniería y producción</span></div>
+    </div>
+  </section>
+
+  <!-- 18 -->
+  <section class="slide oscura" data-titulo="Marketing">
+    <img class="marca" src="img/logo-blanco.png" alt="">
+    <span class="area">Marketing</span>
+    <h2 class="punch p-m">Tu problema, <em>en todas tus redes.</em></h2>
+    <div class="miembros">
+      <div class="miembro paso"><div class="foto-pend">DG</div><b>Darleen García de León</b><span>Marketing</span></div>
+      <div class="miembro paso"><div class="foto-pend">AC</div><b>Andrea Covarrubias</b><span>Marketing</span></div>
+      <div class="miembro paso"><div class="foto-pend">RI</div><b>Regina Izar</b><span>Marketing</span></div>
+      <div class="miembro paso"><div class="foto-pend">MZ</div><b>Mariana Zayas</b><span>Marketing</span></div>
+    </div>
+  </section>
+
+  <!-- 19 -->
+  <section class="slide azul direccion centro" data-titulo="CEO · COO">
+    <img class="marca" src="img/logo-blanco.png" alt="">
+    <h2 class="punch p-m">Ellas dirigen. <em>Tú compras.</em></h2>
+    <div class="miembros" style="justify-content:center">
+      <div class="miembro paso"><div class="foto-pend">MT</div><b>Mariana Tamayo</b><span>Directora ejecutiva · CEO</span></div>
+      <div class="miembro paso"><div class="foto-pend">ER</div><b>Emma Reyes</b><span>Directora de operaciones · COO</span></div>
+    </div>
+  </section>
+
+  <!-- 20 -->
+  <section class="slide azul" data-titulo="Todo problema tiene un producto" data-musica="cumbia2mp3.mp3" data-vol="0.75">
+    <img class="marca" src="img/logo-blanco.png" alt="">
+    <div class="cierre">
+      <div>
+        <h2 class="punch p-xl">Todo problema<br><em>tiene un producto.</em></h2>
+        <a class="sitio" href="https://aguazero.lol" target="_blank" rel="noopener">aguazero.lol</a>
+        <p class="gracias">AGUA ZERO™ · Muchas gracias.</p>
+      </div>
+      <div class="qr"><svg id="qr" viewBox="0 0 33 33" shape-rendering="crispEdges" role="img" aria-label="Código QR a aguazero.lol"></svg><b>Escanea y compra</b></div>
+    </div>
+  </section>
+
+</div>
+
+<div id="controles">
+  <button id="bAnt" title="Anterior (←)">◀</button>
+  <button id="bSig" title="Siguiente (→)">▶</button>
+  <span id="cuenta">1 / 20</span>
+  <div id="progreso" title="Ir a…"><i></i><span></span></div>
+  <span id="sonando" title="Música (M)"><span class="eq"><i></i><i></i><i></i></span><span id="pista">sin música</span></span>
+  <button id="bSonido" title="Música on/off (M)">🔊</button>
+  <button id="bIndice" title="Índice (I)">☰</button>
+  <button id="bPantalla" title="Pantalla completa (F)">⛶</button>
+</div>
+<div id="indice"><h2>Índice</h2><div class="lista"></div></div>
+<div id="inicio"><div>Clic o → para empezar (activa la música)</div></div>
+
+<script>
+const $ = s => document.querySelector(s);
+const slides = [...document.querySelectorAll('.slide')];
+const escenario = $('#escenario');
+let actual = 0;
+
+/* ---------- escala 1920×1080 a la ventana ---------- */
+function escalar(){
+  const k = Math.min(innerWidth / 1920, innerHeight / 1080);
+  escenario.style.transform = `translate(-50%,-50%) scale(${k})`;
+  document.querySelectorAll('.navegador').forEach(ajustarIframe);
+}
+function ajustarIframe(nav){
+  const v = nav.querySelector('.vista'), f = nav.querySelector('iframe');
+  const ancho = 1440, k = v.clientWidth / ancho;
+  f.style.width = ancho + 'px'; f.style.height = (v.clientHeight / k) + 'px'; f.style.transform = `scale(${k})`;
+}
+addEventListener('resize', escalar);
+
+/* ---------- QR de aguazero.lol (versión 2, nivel M) ---------- */
+const QR = ["1111111010001010001111111","1000001001011010001000001","1011101010001110001011101","1011101001100111001011101","1011101000111010101011101",
+"1000001011110110101000001","1111111010101010101111111","0000000001110011100000000","1010001100100000100100101","1010010001010101101101011",
+"1001011001100101101011101","1001100101101001011001000","1101111010100111001100001","0010100100000101111100011","1100001000010001001001101",
+"0001110111000100110111000","1111011110011101111110010","0000000011101000100010001","1111111011001110101010001","1000001000111011100010000",
+"1011101001000111111110001","1011101001000110110010110","1011101011110001010111011","1000001001100101100110000","1111111011111100101001001"];
+$('#qr').innerHTML = `<rect width="33" height="33" fill="#fff"/><path fill="#073F42" d="${
+  QR.flatMap((fila,y) => [...fila].map((b,x) => b === '1' ? `M${x+4} ${y+4}h1v1h-1z` : '')).join('')}"/>`;
+
+/* ---------- lluvia del logo ---------- */
+const lluvia = document.querySelector('.lluvia');
+for(let i = 0; i < 28; i++){
+  const g = document.createElement('i'); g.className = 'gota';
+  g.style.left = Math.random()*1920 + 'px'; g.style.animationDuration = (2.5 + Math.random()*3) + 's'; g.style.animationDelay = (-Math.random()*5) + 's';
+  lluvia.appendChild(g);
+}
+
+/* ---------- relojes de oferta ---------- */
+let queda = 2*3600 + 47*60 + 13;
+setInterval(() => {
+  queda = queda > 0 ? queda - 1 : 6*3600;
+  const p = n => String(n).padStart(2,'0');
+  document.querySelectorAll('[data-h]').forEach(e => e.textContent = p(Math.floor(queda/3600)));
+  document.querySelectorAll('[data-m]').forEach(e => e.textContent = p(Math.floor(queda%3600/60)));
+  document.querySelectorAll('[data-s]').forEach(e => e.textContent = p(queda%60));
+}, 1000);
+
+/* ---------- música: cada diapositiva declara su pista ---------- */
+const pistas = {};
+let sonando = null, mudo = false, empezo = false;
+const NOMBRES = {"2aguazweimp3.mp3":"aguazero weimp","producto.mp3":"producto","2producto.mp3":"producto 2","cumbia1mp3.mp3":"cumbia 1","cumbia2mp3.mp3":"cumbia 2","nortenito.mp3":"norteñito"};
+function fundir(a, destino, alTerminar){
+  cancelAnimationFrame(a._anim);
+  const ini = a.volume, t0 = performance.now(), dur = 700;
+  const paso = t => { const k = Math.min(1, (t - t0) / dur); a.volume = ini + (destino - ini) * k;
+    if(k < 1) a._anim = requestAnimationFrame(paso); else if(alTerminar) alTerminar(); };
+  a._anim = requestAnimationFrame(paso);
+}
+// las pistas traen ~2 s de silencio al inicio: arrancan desde aquí
+const INICIO_PISTA = 2;
+const pista = src => pistas[src] ||= Object.assign(new Audio('musica/' + src), {_src: src, preload: 'auto'});
+function musica(s){
+  if(!empezo) return;
+  const src = s.dataset.musica || '', vol = mudo ? 0 : +(s.dataset.vol || .6);
+  if(sonando && sonando._src === src){ fundir(sonando, vol); return; }
+  // un jingle (data-una-vez) termina aunque se avance, salvo que entre otra pista
+  if(!src && sonando && !sonando.loop && !sonando.ended) return;
+  if(sonando){ const a = sonando; fundir(a, 0, () => a.pause()); }
+  sonando = null; $('#pista').textContent = src ? NOMBRES[src] || src : 'sin música';
+  if(!src) return;
+  const a = pista(src);
+  a.loop = !s.hasAttribute('data-una-vez'); a.currentTime = INICIO_PISTA; a.volume = vol;
+  a.play().catch(() => {}); sonando = a;
+  a.onended = () => { if(sonando === a){ sonando = null; $('#pista').textContent = 'sin música'; } };
+}
+function alternarSonido(){
+  mudo = !mudo; document.body.classList.toggle('mudo', mudo); $('#bSonido').textContent = mudo ? '🔇' : '🔊';
+  if(sonando) fundir(sonando, mudo ? 0 : +(slides[actual].dataset.vol || .6));
+}
+
+/* ---------- tienda en vivo: funciona junto a agua-zero/, dentro de él o en aguazero.lol ---------- */
+const urlTienda = (async () => {
+  for(const u of ['../agua-zero/index.html', '../index.html']){
+    try { if((await (await fetch(u, {cache:'no-store'})).text()).includes('id="rejilla"')) return u; } catch(e) {}
+  }
+  return location.protocol === 'file:' ? '../agua-zero/index.html' : 'https://aguazero.lol/';
+})();
+async function cargarTienda(f){ if(!f.src) f.src = await urlTienda; }
+
+/* ---------- navegación ---------- */
+const pasos = s => [...s.querySelectorAll('.paso')];
+function ir(n, conPasos = false){
+  n = Math.max(0, Math.min(slides.length - 1, n));
+  slides[actual].classList.remove('activa');
+  actual = n;
+  const s = slides[n];
+  pasos(s).forEach(p => p.classList.toggle('ver', conPasos));
+  // la animación de entrada se reinicia en cada visita
+  s.querySelectorAll('.mini,.logo-grande').forEach(e => { e.style.animation = 'none'; void e.offsetWidth; e.style.animation = ''; });
+  s.classList.add('activa');
+  [s, slides[n+1], slides[n+2]].forEach(x => x && x.querySelectorAll('iframe[data-tienda]').forEach(cargarTienda));
+  $('#cuenta').textContent = `${n+1} / ${slides.length}`;
+  const pct = Math.round((n+1) / slides.length * 100);
+  $('#progreso i').style.width = pct + '%'; $('#progreso span').textContent = pct + '% vendido';
+  history.replaceState(null, '', '#' + (n+1));
+  document.querySelectorAll('#indice button').forEach((b,i) => b.setAttribute('aria-current', i === n));
+  musica(s);
+  requestAnimationFrame(escalar);
+}
+function siguiente(){
+  const p = pasos(slides[actual]).find(p => !p.classList.contains('ver'));
+  if(p) p.classList.add('ver'); else if(actual < slides.length - 1) ir(actual + 1);
+}
+function anterior(){
+  const vistos = pasos(slides[actual]).filter(p => p.classList.contains('ver'));
+  if(vistos.length) vistos.pop().classList.remove('ver'); else if(actual > 0) ir(actual - 1, true);
+}
+function empezar(){
+  if(empezo) return; empezo = true; $('#inicio').remove();
+  slides.forEach(s => s.dataset.musica && pista(s.dataset.musica).load());
+  musica(slides[actual]);
+}
+
+addEventListener('keydown', e => {
+  if(e.target.closest && e.target.closest('input,textarea')) return;
+  const k = e.key;
+  if(['ArrowRight','ArrowDown',' ','PageDown','Enter'].includes(k)){ e.preventDefault(); if(!empezo) return empezar(); siguiente(); }
+  else if(['ArrowLeft','ArrowUp','PageUp','Backspace'].includes(k)){ e.preventDefault(); empezar(); anterior(); }
+  else if(k === 'Home'){ empezar(); ir(0); }
+  else if(k === 'End'){ empezar(); ir(slides.length - 1, true); }
+  else if(k === 'i' || k === 'I'){ $('#indice').classList.toggle('abierto'); }
+  else if(k === 'Escape'){ $('#indice').classList.remove('abierto'); }
+  else if(k === 'm' || k === 'M'){ alternarSonido(); }
+  else if(k === 'f' || k === 'F'){ pantallaCompleta(); }
+});
+$('#inicio').addEventListener('click', empezar);
+escenario.addEventListener('click', e => {
+  if(e.target.closest('a,button,iframe,.qr') || slides[actual].hasAttribute('data-interactiva')) return;
+  empezar(); siguiente();
+});
+let xToque = null;
+addEventListener('touchstart', e => xToque = e.touches[0].clientX, {passive:true});
+addEventListener('touchend', e => { if(xToque === null) return; const dx = e.changedTouches[0].clientX - xToque; xToque = null;
+  if(Math.abs(dx) > 50){ empezar(); dx < 0 ? siguiente() : anterior(); } });
+$('#bSig').onclick = () => { empezar(); siguiente(); };
+$('#bAnt').onclick = () => { empezar(); anterior(); };
+$('#bSonido').onclick = alternarSonido;
+$('#bIndice').onclick = () => $('#indice').classList.toggle('abierto');
+$('#progreso').onclick = e => { const r = e.currentTarget.getBoundingClientRect(); empezar(); ir(Math.floor((e.clientX - r.left) / r.width * slides.length), true); };
+function pantallaCompleta(){ document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen().catch(() => {}); }
+$('#bPantalla').onclick = pantallaCompleta;
+
+/* índice */
+$('#indice .lista').innerHTML = slides.map((s,i) => `<button data-i="${i}"><small>${i+1}</small>${s.dataset.titulo}</button>`).join('');
+$('#indice').addEventListener('click', e => {
+  const b = e.target.closest('button'); if(b){ empezar(); ir(+b.dataset.i, true); }
+  $('#indice').classList.remove('abierto');
+});
+
+/* los controles se esconden si no se mueve el mouse */
+let reposo;
+addEventListener('mousemove', () => { document.body.classList.remove('quieto'); clearTimeout(reposo); reposo = setTimeout(() => document.body.classList.add('quieto'), 2500); });
+
+const desdeHash = () => Math.max(0, (parseInt(location.hash.slice(1), 10) || 1) - 1);
+addEventListener('hashchange', () => { if(desdeHash() !== actual) ir(desdeHash(), true); });
+ir(desdeHash());
+escalar();
+</script>
+</body>
+</html>
