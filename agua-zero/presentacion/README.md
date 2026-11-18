@@ -36,10 +36,10 @@ El primer clic o → activa la música: el navegador no deja reproducir audio an
 
 ## Música
 
-- `musica/2aguazweimp3.mp3` suena cuando aparece el logo (diapositiva 3) y termina aunque se avance.
+- `musica/2aguazweimp3.mp3` suena cuando aparece el logo (diapositiva 2) y termina aunque se avance.
 - `musica/cumbia2mp3.mp3` suena en bucle en la diapositiva final.
 
 ## Pendiente
 
-- Fotos del equipo: por ahora son círculos con iniciales (diapositivas 17 a 20).
+- Fotos del equipo: por ahora son círculos con iniciales (diapositivas 16 a 19).
 - Necesita internet para las tipografías.
