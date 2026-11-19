@@ -37,7 +37,7 @@ El primer clic o → activa la música: el navegador no deja reproducir audio an
 ## Música
 
 - `musica/aguazweimp3.mp3` suena cuando aparece el logo (diapositiva 2) y termina aunque se avance.
-- `musica/cumbia2mp3.mp3` suena en bucle en la diapositiva final.
+- `musica/cumbia2mp3.mp3` suena una sola vez en la diapositiva final.
 
 ## Equipo
 
