@@ -504,7 +504,7 @@ function musica(s){
   sonando = null; $('#pista').textContent = src ? NOMBRES[src] || src : 'sin música';
   if(!src) return;
   const a = pista(src);
-  a.loop = !s.hasAttribute('data-una-vez'); a.currentTime = +(s.dataset.inicio ?? INICIO_PISTA); a.volume = vol;
+  a.loop = false; a.currentTime = +(s.dataset.inicio ?? INICIO_PISTA); a.volume = vol;
   a.play().catch(() => {}); sonando = a;
   a.onended = () => { if(sonando === a){ sonando = null; $('#pista').textContent = 'sin música'; } };
 }
