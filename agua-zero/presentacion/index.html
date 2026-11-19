@@ -148,14 +148,13 @@ button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
 
 /* ---------- equipo ---------- */
 .area{display:inline-block;align-self:flex-start;background:var(--verde);color:#fff;font-weight:900;font-size:28px;letter-spacing:2px;padding:8px 22px;border-radius:8px;margin-bottom:28px;text-transform:uppercase}
-.miembros{display:flex;gap:46px;margin-top:70px;flex-wrap:wrap}
+.miembros{display:flex;gap:46px;margin-top:56px;flex-wrap:wrap}
 .miembro{width:330px;text-align:center}
-.foto-pend{width:300px;height:300px;margin:0 auto 22px;border-radius:50%;border:5px dashed rgba(255,255,255,.55);display:grid;place-content:center;
-  background:rgba(255,255,255,.08);font-family:var(--display);font-size:110px;color:rgba(255,255,255,.85);position:relative}
-.foto-pend::after{content:"foto";position:absolute;bottom:34px;left:0;right:0;font-family:var(--texto);font-size:22px;font-weight:800;letter-spacing:3px;text-transform:uppercase;opacity:.7}
-.miembro b{display:block;font-size:34px;font-weight:900}
+.miembro .foto{display:block;width:300px;height:400px;margin:0 auto 20px;border-radius:22px;object-fit:cover;
+  border:4px solid rgba(255,255,255,.9);box-shadow:0 24px 60px rgba(0,0,0,.35)}
+.miembro b{display:block;font-size:32px;font-weight:900;line-height:1.15}
 .miembro span{font-size:24px;color:var(--gota-claro);font-weight:700}
-.direccion .miembro{width:520px}.direccion .foto-pend{width:400px;height:400px;font-size:150px}
+.direccion .miembro{width:420px}.direccion .miembro .foto{width:360px;height:480px}
 
 /* ---------- cierre ---------- */
 .cierre{display:grid;grid-template-columns:1fr 520px;gap:90px;align-items:center;height:100%}
@@ -201,7 +200,7 @@ body.quieto #controles{opacity:0}
   </section>
 
   <!-- 2 -->
-  <section class="slide azul centro" data-titulo="AGUA ZERO™" data-musica="2aguazweimp3.mp3" data-vol="1" data-una-vez>
+  <section class="slide azul centro" data-titulo="AGUA ZERO™" data-musica="aguazweimp3.mp3" data-vol="1" data-inicio="1.35" data-una-vez>
     <div class="lluvia"></div>
     <img class="logo-grande" src="img/logo-blanco.png" alt="AGUA ZERO">
     <div class="marca-tm">AGUA ZERO<sup>™</sup></div>
@@ -367,8 +366,8 @@ body.quieto #controles{opacity:0}
     <span class="area">Investigación hídrica</span>
     <h2 class="punch p-m">Mapeamos lo que sale <em>de tu llave.</em></h2>
     <div class="miembros">
-      <div class="miembro paso"><div class="foto-pend">PC</div><b>Paulina Covarrubias</b><span>Investigación hídrica</span></div>
-      <div class="miembro paso"><div class="foto-pend">MG</div><b>María Fernanda Gutiérrez</b><span>Investigación hídrica</span></div>
+      <div class="miembro paso"><img class="foto" src="img/equipo/paulina-covarrubias.jpg" alt="Paulina Covarrubias"><b>Paulina Covarrubias</b><span>Investigación hídrica</span></div>
+      <div class="miembro paso"><img class="foto" src="img/equipo/maria-fernanda-gutierrez.jpg" alt="María Fernanda Gutiérrez"><b>María Fernanda Gutiérrez</b><span>Investigación hídrica</span></div>
     </div>
   </section>
 
@@ -378,9 +377,9 @@ body.quieto #controles{opacity:0}
     <span class="area">Ingeniería y producción</span>
     <h2 class="punch p-m">Fabricamos la solución <em>antes que la ciudad.</em></h2>
     <div class="miembros">
-      <div class="miembro paso"><div class="foto-pend">AF</div><b>Andrew Fontanot</b><span>Ingeniería y producción</span></div>
-      <div class="miembro paso"><div class="foto-pend">PT</div><b>Pablo Torres</b><span>Ingeniería y producción</span></div>
-      <div class="miembro paso"><div class="foto-pend">SO</div><b>Sara Ortega</b><span>Ingeniería y producción</span></div>
+      <div class="miembro paso"><img class="foto" src="img/equipo/andrew-fontanot.jpg" alt="Andrew Fontanot"><b>Andrew Fontanot</b><span>Ingeniería y producción</span></div>
+      <div class="miembro paso"><img class="foto" src="img/equipo/pablo-torres.jpg" alt="Pablo Torres"><b>Pablo Torres</b><span>Ingeniería y producción</span></div>
+      <div class="miembro paso"><img class="foto" src="img/equipo/sara-ortega.jpg" alt="Sara Ortega"><b>Sara Ortega</b><span>Ingeniería y producción</span></div>
     </div>
   </section>
 
@@ -390,10 +389,10 @@ body.quieto #controles{opacity:0}
     <span class="area">Marketing</span>
     <h2 class="punch p-m">Tu problema, <em>en todas tus redes.</em></h2>
     <div class="miembros">
-      <div class="miembro paso"><div class="foto-pend">DG</div><b>Darleen García de León</b><span>Marketing</span></div>
-      <div class="miembro paso"><div class="foto-pend">AC</div><b>Andrea Covarrubias</b><span>Marketing</span></div>
-      <div class="miembro paso"><div class="foto-pend">RI</div><b>Regina Izar</b><span>Marketing</span></div>
-      <div class="miembro paso"><div class="foto-pend">MZ</div><b>Mariana Zayas</b><span>Marketing</span></div>
+      <div class="miembro paso"><img class="foto" src="img/equipo/darleen-garcia.jpg" alt="Darleen García de León"><b>Darleen García de León</b><span>Marketing</span></div>
+      <div class="miembro paso"><img class="foto" src="img/equipo/andrea-covarrubias.jpg" alt="Andrea Covarrubias"><b>Andrea Covarrubias</b><span>Marketing</span></div>
+      <div class="miembro paso"><img class="foto" src="img/equipo/regina-izar.jpg" alt="Regina Izar"><b>Regina Izar</b><span>Marketing</span></div>
+      <div class="miembro paso"><img class="foto" src="img/equipo/mariana-zayas.jpg" alt="Mariana Zayas"><b>Mariana Zayas</b><span>Marketing</span></div>
     </div>
   </section>
 
@@ -402,8 +401,8 @@ body.quieto #controles{opacity:0}
     <img class="marca" src="img/logo-blanco.png" alt="">
     <h2 class="punch p-m">Ellas dirigen. <em>Tú compras.</em></h2>
     <div class="miembros" style="justify-content:center">
-      <div class="miembro paso"><div class="foto-pend">MT</div><b>Mariana Tamayo</b><span>Directora ejecutiva · CEO</span></div>
-      <div class="miembro paso"><div class="foto-pend">ER</div><b>Emma Reyes</b><span>Directora de operaciones · COO</span></div>
+      <div class="miembro paso"><img class="foto" src="img/equipo/mariana-tamayo.jpg" alt="Mariana Tamayo"><b>Mariana Tamayo</b><span>Directora ejecutiva · CEO</span></div>
+      <div class="miembro paso"><img class="foto" src="img/equipo/emma-reyes.jpg" alt="Emma Reyes"><b>Emma Reyes</b><span>Directora de operaciones · COO</span></div>
     </div>
   </section>
 
@@ -484,7 +483,7 @@ setInterval(() => {
 /* ---------- música: cada diapositiva declara su pista ---------- */
 const pistas = {};
 let sonando = null, mudo = false, empezo = false;
-const NOMBRES = {"2aguazweimp3.mp3":"aguazero weimp","producto.mp3":"producto","2producto.mp3":"producto 2","cumbia1mp3.mp3":"cumbia 1","cumbia2mp3.mp3":"cumbia 2","nortenito.mp3":"norteñito"};
+const NOMBRES = {"aguazweimp3.mp3":"aguazero weimp","cumbia2mp3.mp3":"cumbia 2"};
 function fundir(a, destino, alTerminar){
   cancelAnimationFrame(a._anim);
   const ini = a.volume, t0 = performance.now(), dur = 700;
@@ -492,7 +491,7 @@ function fundir(a, destino, alTerminar){
     if(k < 1) a._anim = requestAnimationFrame(paso); else if(alTerminar) alTerminar(); };
   a._anim = requestAnimationFrame(paso);
 }
-// las pistas traen ~2 s de silencio al inicio: arrancan desde aquí
+// las pistas traen silencio al inicio: arrancan desde aquí (o desde data-inicio)
 const INICIO_PISTA = 2;
 const pista = src => pistas[src] ||= Object.assign(new Audio('musica/' + src), {_src: src, preload: 'auto'});
 function musica(s){
@@ -505,7 +504,7 @@ function musica(s){
   sonando = null; $('#pista').textContent = src ? NOMBRES[src] || src : 'sin música';
   if(!src) return;
   const a = pista(src);
-  a.loop = !s.hasAttribute('data-una-vez'); a.currentTime = INICIO_PISTA; a.volume = vol;
+  a.loop = !s.hasAttribute('data-una-vez'); a.currentTime = +(s.dataset.inicio ?? INICIO_PISTA); a.volume = vol;
   a.play().catch(() => {}); sonando = a;
   a.onended = () => { if(sonando === a){ sonando = null; $('#pista').textContent = 'sin música'; } };
 }
